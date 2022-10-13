@@ -1,16 +1,24 @@
+import pandas as pd
+import pickle
+from tqdm import tqdm
+import numpy as np
+import os
+import networkx as nx
+
+
 def input_paths(proj_path):
 
     input_paths_dict = {'QUIZC_cids_inchi_smiles_path': proj_path + 'QUIZC_drug_CIDs_inchi_smiles.csv',
                         'tool_path': proj_path + 'QUIZC_activityStats_nooutliers_df_besttool.csv',
-                        'L1000_gene_info_path': proj_path + 'GSE92742_Broad_LINCS_gene_info.txt',
-                        'L1000_cell_info_path': proj_path + 'GSE92742_Broad_LINCS_cell_info.txt',
-                        'L1000_inst_info_path': proj_path + 'GSE92742_Broad_LINCS_inst_info.txt',
-                        'L1000_pert_info_path': proj_path + 'GSE92742_Broad_LINCS_pert_info.txt',
-                        'L1000_sig_info_path': proj_path + 'GSE92742_Broad_LINCS_sig_info.txt',
+                        'L1000_gene_info_path': proj_path + 'Pathopticon_external_data/L1000/' + 'GSE92742_Broad_LINCS_gene_info.txt',
+                        'L1000_cell_info_path': proj_path + 'Pathopticon_external_data/L1000/' + 'GSE92742_Broad_LINCS_cell_info.txt',
+                        'L1000_inst_info_path': proj_path + 'Pathopticon_external_data/L1000/' + 'GSE92742_Broad_LINCS_inst_info.txt',
+                        'L1000_pert_info_path': proj_path + 'Pathopticon_external_data/L1000/' + 'GSE92742_Broad_LINCS_pert_info.txt',
+                        'L1000_sig_info_path': proj_path + 'Pathopticon_external_data/L1000/' + 'GSE92742_Broad_LINCS_sig_info.txt',
 
-                        'pos_edges_dict_path': proj_path + 'cell_pos_edges_dict_75.pickle',
-                        'neg_edges_dict_path': proj_path + 'cell_neg_edges_dict_75.pickle',
-                        'drugs_dict_path': proj_path + 'cell_drugs_dict_75.pickle',
+                        'pos_edges_dict_path': proj_path + 'QUIZC75/' + 'cell_pos_edges_dict_75.pickle',
+                        'neg_edges_dict_path': proj_path + 'QUIZC75/' + 'cell_neg_edges_dict_75.pickle',
+                        'drugs_dict_path': proj_path + 'QUIZC75/' + 'cell_drugs_dict_75.pickle',
 
                         'cgp_dir': proj_path + 'c2.cgp.v7.1.symbols.gmt',
 
