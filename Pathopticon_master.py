@@ -4,12 +4,15 @@ from tqdm import tqdm
 import numpy as np
 import os
 import networkx as nx
+import scipy.stats as st
 
 
 def input_paths(proj_path):
 
-    input_paths_dict = {'QUIZC_cids_inchi_smiles_path': proj_path + 'QUIZC_drug_CIDs_inchi_smiles.csv',
-                        'tool_path': proj_path + 'QUIZC_activityStats_nooutliers_df_besttool.csv',
+    input_paths_dict = {'QUIZC_cids_inchi_smiles_path': proj_path + 'Pathopticon_intermediary_outputs/' + 'QUIZC_drug_CIDs_inchi_smiles.csv',
+                        'tool_path': proj_path + 'Pathopticon_intermediary_outputs/' + 'QUIZC_activityStats_nooutliers_df_besttool.csv',
+                        'benchmark_genesets_path': proj_path + 'Pathopticon_intermediary_outputs/' + 'benchmark_genesets.csv',
+                        
                         'L1000_gene_info_path': proj_path + 'Pathopticon_external_data/L1000/' + 'GSE92742_Broad_LINCS_gene_info.txt',
                         'L1000_cell_info_path': proj_path + 'Pathopticon_external_data/L1000/' + 'GSE92742_Broad_LINCS_cell_info.txt',
                         'L1000_inst_info_path': proj_path + 'Pathopticon_external_data/L1000/' + 'GSE92742_Broad_LINCS_inst_info.txt',
@@ -20,15 +23,15 @@ def input_paths(proj_path):
                         'neg_edges_dict_path': proj_path + 'QUIZC75/' + 'cell_neg_edges_dict_75.pickle',
                         'drugs_dict_path': proj_path + 'QUIZC75/' + 'cell_drugs_dict_75.pickle',
 
-                        'cgp_dir': proj_path + 'c2.cgp.v7.1.symbols.gmt',
+                        'cgp_dir': proj_path + 'Pathopticon_external_data/MSigDB/' + 'c2.cgp.v7.1.symbols.gmt',
 
-                        'Enrichr_GEO_up_path': proj_path + 'Disease_Perturbations_from_GEO_up.txt',
-                        'Enrichr_GEO_dn_path': proj_path + 'Disease_Perturbations_from_GEO_down.txt',
+                        'Enrichr_GEO_up_path': proj_path + 'Pathopticon_external_data/Enrichr/' + 'Disease_Perturbations_from_GEO_up.txt',
+                        'Enrichr_GEO_dn_path': proj_path + 'Pathopticon_external_data/Enrichr/' + 'Disease_Perturbations_from_GEO_down.txt',
 
-                        'TTD_drugs_path': proj_path + 'P1-02-TTD_drug_download.txt',
-                        'TTD_InChI2CID_path': proj_path + 'TTD_drugs_InChI2CID.txt',
-                        'TTD_drug_target_path': proj_path + 'P1-07-Drug-TargetMapping.csv',
-                        'TTD_target_path': proj_path + 'P1-01-TTD_target_download.txt',
+                        'TTD_drugs_path': proj_path + 'Pathopticon_external_data/TTD/' + 'P1-02-TTD_drug_download.txt',
+                        'TTD_InChI2CID_path': proj_path + 'Pathopticon_external_data/TTD/' + 'TTD_drugs_InChI2CID.txt',
+                        'TTD_drug_target_path': proj_path + 'Pathopticon_external_data/TTD/' + 'P1-07-Drug-TargetMapping.csv',
+                        'TTD_target_path': proj_path + 'Pathopticon_external_data/TTD/' + 'P1-01-TTD_target_download.txt',
                         'MODZ_networks_path': proj_path + 'MODZ_networks/',
                         'CD_networks_path': proj_path + 'CD_networks/'}
     
@@ -509,7 +512,7 @@ def run_benchmark(proj_path, proj_output_path, benchmark_path, method_name,
                                                                                                                input_paths_dict['L1000_pert_info_path'], 
                                                                                                                input_paths_dict['L1000_sig_info_path'])    
     
-    QUIZC_cids_inchi_smiles = pd.read_csv(input_paths_dict['QRZC_cids_inchi_smiles_path'])
+    QUIZC_cids_inchi_smiles = pd.read_csv(input_paths_dict['QUIZC_cids_inchi_smiles_path'])
     QUIZC_activityStats_nooutliers_df_besttool = pd.read_csv(input_paths_dict['tool_path'])
         
     cgp_updn, cgp_updn_labels, cgp_updn_allgenes = process_MSigDB_CGP(input_paths_dict['cgp_dir'])
@@ -537,14 +540,14 @@ def run_benchmark(proj_path, proj_output_path, benchmark_path, method_name,
     
     pcp_perturbation_df_dict = PCP_perturbation_alldrugs(alldrugs, allcells, edgelist_df_dict, 
                                                          Enrichr_GEO_disease_human_up, Enrichr_GEO_disease_human_dn,
-                                                         proj_output_path, method_name=method_name, return_output=True) 
+                                                         benchmark_path, method_name=method_name, return_output=True) 
                                                                                                                
     print('Calculating PCPs for all benchmark gene sets...', flush=True)                                                                                                                
     pcp_geneset_allMsigDB_df = PCP_geneset_allMsigDB(cgp_updn, cgp_updn_labels, Enrichr_GEO_disease_human_up, Enrichr_GEO_disease_human_dn)
     
     
     print('Running the benchmark...', flush=True)      
-    benchmark_genesets = pd.read_csv(proj_path + 'benchmark_genesets.csv', header=None).rename(columns={0: 'Geneset_name'})
+    benchmark_genesets = pd.read_csv(input_paths_dict['benchmark_genesets_path'], header=None).rename(columns={0: 'Geneset_name'})
                                                                                                                
     for geneset_name in tqdm(benchmark_genesets['Geneset_name'].to_numpy(), position=0, leave=True):
         
@@ -617,3 +620,98 @@ def get_topN_tanimoto(pacos_tool_merged_df_path, benchmark_genesets, apfp_Tanimo
             top50_tanimoto_dict[geneset_name] = temp_tanimoto_df['Tanimoto coefficient'].to_numpy()
             
     return top50_tanimoto_dict
+    
+def get_activity_stats(chembl27_QUIZC_CIDs):
+    
+    activityStats_df = pd.DataFrame()
+    for cid in tqdm(chembl27_QUIZC_CIDs['PubChem CID'].sort_values().drop_duplicates(), position=0, leave=True):
+
+        temp_cid_df = chembl27_QUIZC_CIDs[(chembl27_QUIZC_CIDs['Standard Units'] == 'nM') &
+                                         (chembl27_QUIZC_CIDs['Standard Relation'] == "'='") &
+                                         (chembl27_QUIZC_CIDs['PubChem CID']==cid)]
+        cid_targets = set(temp_cid_df['NCBI Gene ID(supplied by NCBI)'])
+        temp_on_nM = {}
+        temp_off_nM = {}
+        for on_t in cid_targets:
+            off_t = cid_targets - set([on_t])
+            temp_on_nM[on_t] = temp_cid_df[temp_cid_df['NCBI Gene ID(supplied by NCBI)']==on_t]['Standard Value'].values
+            temp_off_nM[on_t] = temp_cid_df[temp_cid_df['NCBI Gene ID(supplied by NCBI)'].isin(off_t)]['Standard Value'].values
+
+            # remove measurements with negative nM values, if any   
+            temp_on_nM[on_t] = temp_on_nM[on_t][temp_on_nM[on_t] > 0]
+            temp_off_nM[on_t] = temp_off_nM[on_t][temp_off_nM[on_t] > 0]
+
+            if (len(temp_on_nM[on_t]) > 0) & (len(temp_off_nM[on_t]) > 0):
+
+                if (len(temp_on_nM[on_t][temp_on_nM[on_t] <= 100.0]) > 1):
+                    strength = 7
+                elif (len(temp_on_nM[on_t][temp_on_nM[on_t] <= 1000.0]) > 4):
+                    strength = 4
+                else:
+                    strength = 1
+
+                data_bias = len(temp_on_nM[on_t]) / (len(temp_on_nM[on_t]) + len(temp_off_nM[on_t]))
+                Q1_diff = np.quantile(np.log10(temp_off_nM[on_t]), 0.25) - np.quantile(np.log10(temp_on_nM[on_t]), 0.25)
+                Q3_diff = np.quantile(np.log10(temp_off_nM[on_t]), 0.75) - np.quantile(np.log10(temp_on_nM[on_t]), 0.75)
+
+                KS_pval = st.ks_2samp(temp_on_nM[on_t], temp_off_nM[on_t])[1]
+                if (KS_pval<1e-16): KS_pval = 1e-16
+
+                selectivity = ((Q1_diff/3) + (-np.log10(KS_pval)/16.0) + (1 - data_bias)) / 3
+                tool_score = selectivity * strength
+
+                activityStats_df = activityStats_df.append(pd.DataFrame([cid, on_t, KS_pval, Q1_diff, Q3_diff, data_bias, 
+                                                                         selectivity, strength, tool_score]).T)
+
+    activityStats_df = activityStats_df.reset_index(drop=True).rename(columns={0: 'cid', 1: 'Target Entrez ID', 2: 'K-S p-value', 
+                                                                               3: 'Q1_diff', 4: 'Q3_diff',  5: 'data_bias', 
+                                                                               6: 'selectivity score', 7: 'strength', 8: 'tool score'})
+    
+    return activityStats_df
+
+def calculate_selectivity_tool(activityStats_df, QUIZC_cids_inchi_smiles, iqr_cutoff, tool_outlier_cutoff, proj_intermediary_outputs_path):
+     
+    # Based on the distributions, remove outliers.
+    selectivity_Q1 =  activityStats_df['selectivity score'].quantile(0.25)
+    selectivity_Q3 =  activityStats_df['selectivity score'].quantile(0.75)
+    selectivity_IQR = selectivity_Q3 - selectivity_Q1
+    selectivity_outliers_ix = activityStats_df[((activityStats_df['selectivity score'] < (selectivity_Q1 - (selectivity_IQR  * iqr_cutoff))) | 
+                                   (activityStats_df['selectivity score'] > (selectivity_Q3 + (selectivity_IQR  * iqr_cutoff))))].index
+
+    tool_outliers_ix = activityStats_df[activityStats_df['tool score'] >= tool_outlier_cutoff].index
+
+    nooutliers_ix = set(activityStats_df.index) - (set(selectivity_outliers_ix) | set(tool_outliers_ix))
+
+    activityStats_df_nooutliers = activityStats_df.loc[nooutliers_ix]
+    
+    
+    # Scale selectivity and tool scores
+    sel_scale_len = (activityStats_df_nooutliers['selectivity score'].max() - activityStats_df_nooutliers['selectivity score'].min()) / 2
+    sel_scale_diff = activityStats_df_nooutliers['selectivity score'].max() - sel_scale_len
+    activityStats_df_nooutliers['selectivity score scaled'] = (activityStats_df_nooutliers['selectivity score'] - sel_scale_diff) / sel_scale_len
+
+    tool_scale_len = (activityStats_df_nooutliers['tool score'].max() - activityStats_df_nooutliers['tool score'].min()) / 2
+    tool_scale_diff = activityStats_df_nooutliers['tool score'].max() - tool_scale_len
+    activityStats_df_nooutliers['tool score scaled'] = (activityStats_df_nooutliers['tool score'] - tool_scale_diff) / tool_scale_len
+    
+    
+    # Merge with QUIZC_cids_inchi_smiles to get the pert_iname. Note that when we are writing to file we are collapsing drug-target pairs onto
+    # the drug space. When we do so, we take the drug-target pairs with either the highest tool scores (first one below) or selectivity scores
+    # (second one below). The resulting file name clarifies this choice.
+    QUIZC_activityStats_nooutliers_df_besttool = pd.merge(activityStats_df_nooutliers.sort_values(['cid', 'tool score scaled'], ascending=[True, False])
+                                                              .drop_duplicates('cid'), 
+                                                              QUIZC_cids_inchi_smiles[['Pert_iname', 'pubchem_cid_x']], 
+                                                              left_on='cid', right_on='pubchem_cid_x', how='inner').drop_duplicates()
+
+    QUIZC_activityStats_nooutliers_df_besttool.to_csv(proj_intermediary_outputs_path + 'QUIZC_activityStats_nooutliers_df_besttool.csv', 
+                                                     index=False)
+
+    QUIZC_activityStats_nooutliers_df_bestselectivity = pd.merge(activityStats_df_nooutliers.sort_values(['cid', 'selectivity score scaled'], 
+                                                                                                        ascending=[True, False])
+                                                                .drop_duplicates('cid'), 
+                                                                QUIZC_cids_inchi_smiles[['Pert_iname', 'pubchem_cid_x']], 
+                                                                left_on='cid', right_on='pubchem_cid_x', how='inner').drop_duplicates()
+
+    QUIZC_activityStats_nooutliers_df_bestselectivity.to_csv(proj_intermediary_outputs_path + 'QUIZC_activityStats_nooutliers_df_bestselectivity.csv', index=False)
+    
+    return QUIZC_activityStats_nooutliers_df_besttool, QUIZC_activityStats_nooutliers_df_bestselectivity
