@@ -540,7 +540,7 @@ def run_benchmark(proj_path, proj_output_path, benchmark_path, method_name,
     
     pcp_perturbation_df_dict = PCP_perturbation_alldrugs(alldrugs, allcells, edgelist_df_dict, 
                                                          Enrichr_GEO_disease_human_up, Enrichr_GEO_disease_human_dn,
-                                                         benchmark_path, method_name=method_name, return_output=True) 
+                                                         proj_output_path, method_name=method_name, return_output=True) 
                                                                                                                
     print('Calculating PCPs for all benchmark gene sets...', flush=True)                                                                                                                
     pcp_geneset_allMsigDB_df = PCP_geneset_allMsigDB(cgp_updn, cgp_updn_labels, Enrichr_GEO_disease_human_up, Enrichr_GEO_disease_human_dn)
@@ -579,37 +579,37 @@ def run_benchmark(proj_path, proj_output_path, benchmark_path, method_name,
             
     print('Benchmark complete.', flush=True)           
 
-def get_topN_drugs(benchmark_genesets, method_name='QUIZ-C', model='PACOS_tool_combined', topN=50, pacos_tool_merged_df_path=None):
+def get_topN_drugs(ranked_df_path, benchmark_genesets, method_name='QUIZ-C', model='PACOS_tool_combined', topN=50):
     
     top50_alldrugs = set()
     if method_name in ['QUIZ-C', 'MODZ', 'CD']:
         for geneset_name in tqdm(benchmark_genesets['Geneset_name'].to_numpy(), position=0, leave=True):      
-            ranked_df = pd.read_csv(pacos_tool_merged_df_path + '%s_%s_r2.csv' % (method_name, geneset_name))
+            ranked_df = pd.read_csv(ranked_df_path + '%s_%s_r2.csv' % (method_name, geneset_name))
             combined_topN = ranked_df.sort_values(model, ascending=False)['Pert_iname'].unique()[0:topN]
             top50_alldrugs.update(set(combined_topN))
                         
     elif method_name == 'L1000CDS2':
-        with open(proj_output_path + 'L1000CDS2_result_df_dict.pickle', 'rb') as handle:
+        with open(ranked_df_path + 'L1000CDS2_result_df_dict.pickle', 'rb') as handle:
             L1000CDS2_result_df_dict = pickle.load(handle)
         for geneset_name in tqdm(benchmark_genesets['Geneset_name'].to_numpy(), position=0, leave=True):      
             top50_alldrugs.update(set(L1000CDS2_result_df_dict[geneset_name]['pert_iname']))
            
     return top50_alldrugs
 
-def get_topN_tanimoto(pacos_tool_merged_df_path, benchmark_genesets, apfp_Tanimoto_pert_iname, 
+def get_topN_tanimoto(ranked_df_path, benchmark_genesets, apfp_Tanimoto_pert_iname, 
                       method_name='QUIZ-C', model='PACOS_tool_combined', topN=50):
     
     top50_tanimoto_dict = {} 
     if method_name in ['QUIZ-C', 'MODZ', 'CD']:
         for geneset_name in tqdm(benchmark_genesets['Geneset_name'].to_numpy(), position=0, leave=True):
-            ranked_df = pd.read_csv(pacos_tool_merged_df_path + '%s_%s_r2.csv' % (method_name, geneset_name))
+            ranked_df = pd.read_csv(ranked_df_path + '%s_%s_r2.csv' % (method_name, geneset_name))
             combined_topN = ranked_df.sort_values(model, ascending=False)['Pert_iname'].unique()[0:topN]
             temp_tanimoto_df = apfp_Tanimoto_pert_iname[(apfp_Tanimoto_pert_iname['Pert_iname_x'].isin(set(combined_topN))) & 
                                                               (apfp_Tanimoto_pert_iname['Pert_iname_y'].isin(set(combined_topN)))].drop_duplicates()
             top50_tanimoto_dict[geneset_name] = temp_tanimoto_df['Tanimoto coefficient'].to_numpy()
             
     elif method_name == 'L1000CDS2':
-        with open(proj_output_path + 'L1000CDS2_result_df_dict.pickle', 'rb') as handle:
+        with open(ranked_df_path + 'L1000CDS2_result_df_dict.pickle', 'rb') as handle:
             L1000CDS2_result_df_dict = pickle.load(handle)        
         for geneset_name in tqdm(benchmark_genesets['Geneset_name'].to_numpy(), position=0, leave=True): 
             rank_df = L1000CDS2_result_df_dict[geneset_name]
