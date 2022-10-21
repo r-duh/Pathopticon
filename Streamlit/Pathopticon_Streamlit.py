@@ -3,11 +3,11 @@ import streamlit as st
 import streamlit.components.v1 as components
 import numpy as np
 import pandas as pd
-from tqdm import tqdm
-import pickle
+#from tqdm import tqdm
+#import pickle
 import base64
-import os
-import json
+#import os
+#import json
 import networkx as nx
 from pyvis.network import Network
 from bokeh.io import show
@@ -134,13 +134,13 @@ elif side_radio == 'Run Pathopticon':
 		mm2 = form_cols1[1].selectbox(
 			'Effect',
 			 ['Repress', 'Enhance'])
-		nn1 = form_cols1[2].selectbox(
+		method_name = form_cols1[2].selectbox(
 			'Gene-perturbation network',
 			 ['QUIZ-C', 'MODZ', 'CD']) 
 	
 		form_cols2 = st.columns(3)
 		rr = form_cols2[0].number_input('r value (default=2.0)', value=2.0, step=0.01)
-		nn2 = form_cols2[1].number_input('Number of randomizations (default=400)', 400, step=100) 
+		Nrand = form_cols2[1].number_input('Number of randomizations (default=400)', 400, step=100) 
 		default_geneset_name, default_up, default_dn = default_input_geneset()
 		geneset_name = form_cols2[2].text_input('Input gene signature name', default_geneset_name)
 	
@@ -200,23 +200,23 @@ elif side_radio == 'Run Pathopticon':
 
 
 
-				data_load_state = status_msg.text('Processing %s networks...' % nn1)
-				if nn1 == 'QUIZ-C':
+				data_load_state = status_msg.text('Processing %s networks...' % method_name)
+				if method_name == 'QUIZ-C':
 					edgelist_df_dict, nodelist_df_dict, allcells, allgenes, alldrugs, allnodes = process_QUIZC_output(input_paths_dict['pos_edges_dict_path'], 
 																												 input_paths_dict['neg_edges_dict_path'],
 																												 input_paths_dict['drugs_dict_path'],
 																												 L1000_gene_info)
 				else:
-					edgelist_df_dict, nodelist_df_dict, allcells, allgenes, alldrugs, allnodes = import_CD_MODZ_networks(input_paths_dict['%s_networks_path' % nn1])				
+					edgelist_df_dict, nodelist_df_dict, allcells, allgenes, alldrugs, allnodes = import_CD_MODZ_networks(input_paths_dict['%s_networks_path' % method_name])				
 				diG_dict = generate_diG_dict(nodelist_df_dict, edgelist_df_dict, allcells)
-				data_load_state.text('Processing %s networks...done.' %nn1)
+				data_load_state.text('Processing %s networks...done.' %method_name)
 
 
-				data_load_state = status_msg.text('Reading precomputed PCPs (on %s networks) for all perturbations...' % nn1)
+				data_load_state = status_msg.text('Reading precomputed PCPs (on %s networks) for all perturbations...' % method_name)
 				pcp_perturbation_df_dict = PCP_perturbation_alldrugs(alldrugs, allcells, edgelist_df_dict, 
                                                          Enrichr_GEO_disease_human_up, Enrichr_GEO_disease_human_dn,
-                                                         input_paths_dict['benchmark_path'], method_name=nn1, return_output=True) 
-				data_load_state.text('Reading precomputed PCPs (on %s networks) for all perturbations...done.' % nn1)
+                                                         input_paths_dict['benchmark_path'], method_name=method_name, return_output=True) 
+				data_load_state.text('Reading precomputed PCPs (on %s networks) for all perturbations...done.' % method_name)
 
 				data_load_state = status_msg.text('Calculating PCP for input gene signature...')
 				pcp_geneset_df = PCP_geneset(geneset_up, geneset_dn, Enrichr_GEO_disease_human_up, Enrichr_GEO_disease_human_dn, geneset_name=geneset_name)
@@ -224,8 +224,8 @@ elif side_radio == 'Run Pathopticon':
 
 				data_load_state = status_msg.text('Running Pathopticon...(this may take a few minutes)')
 				pacos_tool_merged_df = PACOS(pcp_geneset_df, pcp_perturbation_df_dict, alldrugs, allcells,
-											 QUIZC_activityStats_nooutliers_df_besttool, proj_path, method_name=nn1, geneset_name=geneset_name, 
-											 r=rr, threshold=10, tqdm_off=True)
+											 QUIZC_activityStats_nooutliers_df_besttool, proj_path, method_name=method_name, geneset_name=geneset_name, 
+											 r=rr, threshold=10, tqdm_off=False)
 				model_auroc_df, model_auprc_df = PACOS_cell_AUC(pacos_tool_merged_df, allcells, geneset_targets, models=[PACOS_model])
 				data_load_state.text('Running Pathopticon...done.')
 
@@ -234,7 +234,7 @@ elif side_radio == 'Run Pathopticon':
 																							  geneset_targets, 
 																							  models=[PACOS_model],
 																							  auc_params={'auc_threshold':5, 'binsize':1}, 
-																							  Nrand=nn2, tqdm_off=True) 
+																							  Nrand=Nrand, tqdm_off=False) 
 
 				emp_pval_df, pacos_nested_df = PACOS_nested_prioritization(pacos_tool_merged_df, model_auroc_df, rand_model_auroc_df_dict)    
 				data_load_state.text('Performing cell line-specific randomization...done.')	
@@ -243,6 +243,8 @@ elif side_radio == 'Run Pathopticon':
 				with expander_results:
 					results_cont = st.container()
 
+				pacos_nested_df = pacos_nested_df[['Pert_iname', 'Cell_type', '%s' % PACOS_model, '%s_AUROC' % PACOS_model, '%s_AUROC_emp_pval' % PACOS_model]]
+				pacos_nested_df = pacos_nested_df.rename(columns={'%s_AUROC' % PACOS_model: 'AUROC', '%s_AUROC_emp_pval' % PACOS_model: 'AUROC_emp_pval'})
 				results_cont.write(pacos_nested_df)   		
 				filename = '%s_Pathopticon.csv' % geneset_name					
 				csv_b64 = base64.b64encode(pacos_nested_df.to_csv(index=False).encode()).decode()

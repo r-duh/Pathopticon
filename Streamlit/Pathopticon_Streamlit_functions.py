@@ -193,9 +193,9 @@ def generate_diG_dict(nodelist_df_dict, edgelist_df_dict, allcells):
         diG_dict[c] = nx.DiGraph()
         for ix, node in enumerate(nodelist_df_dict[c]['Id'].values):
             if nodelist_df_dict[c].iloc[ix]['Type']=='Drug':
-                diG_dict[c].add_node(node, node_type='Drug', node_color='limegreen', node_size=150)
+                diG_dict[c].add_node(node, node_type='Drug', node_color='lime', node_size=15)
             elif nodelist_df_dict[c].iloc[ix]['Type']=='Gene':
-                diG_dict[c].add_node(node, node_type='Gene', node_color='darkslateblue', node_size=50) 
+                diG_dict[c].add_node(node, node_type='Gene', node_color='yellow', node_size=5) 
 
         for edge in edgelist_df_dict[c].values:       
             if edge[2]=='Up':
@@ -515,3 +515,30 @@ def PACOS_nested_prioritization(PACOS_tool_merged_df, model_auroc_df, rand_model
         
     return emp_pval_df, PACOS_nested_df
 
+#@st.cache(show_spinner=False)
+def generate_input_spoke(geneset_name, geneset_up, geneset_dn):
+
+	input_spoke = nx.DiGraph()	
+	input_spoke.add_node(geneset_name, node_type='input_geneset_name', node_color='orange', node_size=20)
+	for node in geneset_up:
+		input_spoke.add_node(node, node_type='Gene', node_color='yellow', node_size=5)
+		input_spoke.add_edge(geneset_name, node, edge_type='Up', edge_color='red')
+	for node in geneset_dn:
+		input_spoke.add_node(node, node_type='Gene', node_color='yellow', node_size=5)
+		input_spoke.add_edge(geneset_name, node, edge_type='Down', edge_color='deepskyblue')
+		
+	return input_spoke
+	
+#@st.cache(show_spinner=False)
+def generate_disease_spoke(disease_name, disease_up, disease_dn):
+
+	disease_spoke = nx.DiGraph()	
+	disease_spoke.add_node(disease_name, node_type='disease_name', node_color='pink', node_size=20)
+	for node in disease_up:
+		disease_spoke.add_node(node, node_type='Gene', node_color='yellow', node_size=5)
+		disease_spoke.add_edge(disease_name, node, edge_type='Up', edge_color='red')
+	for node in disease_dn:
+		disease_spoke.add_node(node, node_type='Gene', node_color='yellow', node_size=5)
+		disease_spoke.add_edge(disease_name, node, edge_type='Down', edge_color='deepskyblue')
+		
+	return disease_spoke
