@@ -3,11 +3,7 @@ import streamlit as st
 import streamlit.components.v1 as components
 import numpy as np
 import pandas as pd
-#from tqdm import tqdm
-#import pickle
 import base64
-#import os
-#import json
 import networkx as nx
 from pyvis.network import Network
 from bokeh.io import show
@@ -17,9 +13,6 @@ from bokeh.models import CustomJS, Select, HoverTool
 
 
 
-
-
-#########################################################################################################################
 proj_path = '/Users/ardahalu/Research/CICS/L1000_project/Pathopticon_all_analyses/'
 
 
