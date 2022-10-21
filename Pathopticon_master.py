@@ -499,7 +499,7 @@ def PACOS_nested_prioritization(PACOS_tool_merged_df, model_auroc_df, rand_model
         
     return emp_pval_df, PACOS_nested_df
 
-def run_benchmark(proj_path, proj_output_path, benchmark_path, method_name, 
+def run_benchmark(proj_path, benchmark_path, method_name, 
                   PACOS_Spearman_threshold=10, r=2.0,  Nrand=100, auc_params={'auc_threshold':5, 'binsize':1}, 
                   models=['PACOS_Spearman_rho', 'PACOS_Spearman_rho_reverse', 'PACOS_tool_combined', 'PACOS_tool_combined_reverse']):
     
@@ -540,7 +540,7 @@ def run_benchmark(proj_path, proj_output_path, benchmark_path, method_name,
     
     pcp_perturbation_df_dict = PCP_perturbation_alldrugs(alldrugs, allcells, edgelist_df_dict, 
                                                          Enrichr_GEO_disease_human_up, Enrichr_GEO_disease_human_dn,
-                                                         proj_output_path, method_name=method_name, return_output=True) 
+                                                         benchmark_path, method_name=method_name, return_output=True) 
                                                                                                                
     print('Calculating PCPs for all benchmark gene sets...', flush=True)                                                                                                                
     pcp_geneset_allMsigDB_df = PCP_geneset_allMsigDB(cgp_updn, cgp_updn_labels, Enrichr_GEO_disease_human_up, Enrichr_GEO_disease_human_dn)
@@ -577,7 +577,7 @@ def run_benchmark(proj_path, proj_output_path, benchmark_path, method_name,
             pacos_nested_df.to_csv(benchmark_path +  'Nested_%s_%s_r%s.csv' % (method_name, geneset_name, int(r)), index=False)
     
             
-    print('Benchmark complete.', flush=True)           
+    print('Benchmark complete.', flush=True)                     
 
 def get_topN_drugs(ranked_df_path, benchmark_genesets, method_name='QUIZ-C', model='PACOS_tool_combined', topN=50):
     
