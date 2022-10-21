@@ -3,7 +3,6 @@ import streamlit as st
 import streamlit.components.v1 as components
 import numpy as np
 import pandas as pd
-import scipy.stats as sc
 from tqdm import tqdm
 import pickle
 import base64
@@ -21,7 +20,7 @@ from bokeh.models import CustomJS, Select, HoverTool
 
 
 #########################################################################################################################
-proj_path = '/Users/ardahalu/Research/CICS/L1000_project/Pathopticon_Streamlit_Docker/'
+proj_path = '/Users/ardahalu/Research/CICS/L1000_project/Pathopticon_all_analyses/'
 
 
 st.set_page_config(layout='wide')
@@ -216,7 +215,7 @@ elif side_radio == 'Run Pathopticon':
 				data_load_state = status_msg.text('Reading precomputed PCPs (on %s networks) for all perturbations...' % nn1)
 				pcp_perturbation_df_dict = PCP_perturbation_alldrugs(alldrugs, allcells, edgelist_df_dict, 
                                                          Enrichr_GEO_disease_human_up, Enrichr_GEO_disease_human_dn,
-                                                         proj_path, method_name=nn1, return_output=True) 
+                                                         input_paths_dict['benchmark_path'], method_name=nn1, return_output=True) 
 				data_load_state.text('Reading precomputed PCPs (on %s networks) for all perturbations...done.' % nn1)
 
 				data_load_state = status_msg.text('Calculating PCP for input gene signature...')
@@ -226,8 +225,8 @@ elif side_radio == 'Run Pathopticon':
 				data_load_state = status_msg.text('Running Pathopticon...(this may take a few minutes)')
 				pacos_tool_merged_df = PACOS(pcp_geneset_df, pcp_perturbation_df_dict, alldrugs, allcells,
 											 QUIZC_activityStats_nooutliers_df_besttool, proj_path, method_name=nn1, geneset_name=geneset_name, 
-											 r=rr, threshold=PACOS_Spearman_threshold, tqdm_off=True)
-				model_auroc_df_dict, model_auprc_df_dict = PACOS_cell_AUC(pacos_tool_merged_df, allcells, geneset_targets, models=[PACOS_model])
+											 r=rr, threshold=10, tqdm_off=True)
+				model_auroc_df, model_auprc_df = PACOS_cell_AUC(pacos_tool_merged_df, allcells, geneset_targets, models=[PACOS_model])
 				data_load_state.text('Running Pathopticon...done.')
 
 				data_load_state = status_msg.text('Performing cell line-specific randomization...(this may take a few minutes)')

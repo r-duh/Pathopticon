@@ -1,10 +1,11 @@
+import streamlit as st
 import pandas as pd
 import pickle
 from tqdm import tqdm
 import numpy as np
 import os
 import networkx as nx
-import scipy.stats as st
+import scipy.stats as sc
 
 
 @st.cache(show_spinner=False, allow_output_mutation=True)
@@ -80,7 +81,9 @@ def input_paths(proj_path):
                         'TTD_drug_target_path': proj_path + 'Pathopticon_external_data/TTD/' + 'P1-07-Drug-TargetMapping.csv',
                         'TTD_target_path': proj_path + 'Pathopticon_external_data/TTD/' + 'P1-01-TTD_target_download.txt',
                         'MODZ_networks_path': proj_path + 'MODZ_networks/',
-                        'CD_networks_path': proj_path + 'CD_networks/'}
+                        'CD_networks_path': proj_path + 'CD_networks/',
+                        
+                        'benchmark_path': proj_path + 'Pathopticon_benchmark_outputs/'}
     
     return input_paths_dict
 
@@ -98,6 +101,7 @@ def import_L1000_metadata(L1000_gene_info_path, L1000_cell_info_path, L1000_inst
 @st.cache(show_spinner=False, allow_output_mutation=True)  
 def process_QUIZC_output(pos_edges_dict_path, neg_edges_dict_path, drugs_dict_path, L1000_gene_info):
 
+    print('Processing QUIZ-C networks...')
     with open(pos_edges_dict_path, 'rb') as handle:
         cell_pos_edges_dict = pickle.load(handle)
     with open(neg_edges_dict_path, 'rb') as handle:
@@ -109,14 +113,14 @@ def process_QUIZC_output(pos_edges_dict_path, neg_edges_dict_path, drugs_dict_pa
     nodelist_df_dict = {}
     for c in tqdm(cell_drugs_dict.keys(), position=0, leave=True):
 
-        pos_edges_df = pd.DataFrame(np.array([(i, j) for i, j in zip(cell_drugs_dict[c], cell_pos_edges_dict[c])])).explode(1)
-        neg_edges_df = pd.DataFrame(np.array([(i, j) for i, j in zip(cell_drugs_dict[c], cell_neg_edges_dict[c])])).explode(1)
+        pos_edges_df = pd.DataFrame(np.array([(i, j) for i, j in zip(cell_drugs_dict[c], cell_pos_edges_dict[c])], dtype='object')).rename(columns={0: 'Drug', 1: 'Target'}).explode('Target')
+        neg_edges_df = pd.DataFrame(np.array([(i, j) for i, j in zip(cell_drugs_dict[c], cell_neg_edges_dict[c])], dtype='object')).rename(columns={0: 'Drug', 1: 'Target'}).explode('Target')
 
-        pos_edges_df = pos_edges_df[~pd.isnull(pos_edges_df[1])]
-        neg_edges_df = neg_edges_df[~pd.isnull(neg_edges_df[1])]
+        pos_edges_df = pos_edges_df[~pd.isnull(pos_edges_df['Target'])]
+        neg_edges_df = neg_edges_df[~pd.isnull(neg_edges_df['Target'])]
 
-        pos_edges_df = pos_edges_df.reset_index(drop=True).rename(columns={0: 'Drug', 1: 'Target'})
-        neg_edges_df = neg_edges_df.reset_index(drop=True).rename(columns={0: 'Drug', 1: 'Target'})
+        pos_edges_df = pos_edges_df.reset_index(drop=True)
+        neg_edges_df = neg_edges_df.reset_index(drop=True)
 
         pos_edges_df['Target'] = pos_edges_df['Target'].astype(int)
         neg_edges_df['Target'] = neg_edges_df['Target'].astype(int)
@@ -403,7 +407,7 @@ def PACOS(PCP_geneset_df, PCP_perturbation_df_dict, alldrugs, allcells, tool_sco
                 common_diseases = set(PCP_geneset_df.loc[geneset_name][~pd.isnull(PCP_geneset_df.loc[geneset_name])].index) &\
                                     set(PCP_perturbation_df_dict[drug].loc[c][~pd.isnull(PCP_perturbation_df_dict[drug].loc[c])].index)
                 if len(common_diseases) >= threshold:
-                    PACOS_spearman_rho_df.at[drug, c], PACOS_spearman_pval_df.at[drug, c] = st.spearmanr(PCP_geneset_df.loc[geneset_name][common_diseases], 
+                    PACOS_spearman_rho_df.at[drug, c], PACOS_spearman_pval_df.at[drug, c] = sc.spearmanr(PCP_geneset_df.loc[geneset_name][common_diseases], 
                                                                       PCP_perturbation_df_dict[drug].loc[c][common_diseases])
 
         PACOS_spearman_rho_df[pd.isnull(PACOS_spearman_rho_df)] = -666
