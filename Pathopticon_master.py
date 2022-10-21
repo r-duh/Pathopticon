@@ -33,7 +33,11 @@ def input_paths(proj_path):
                         'TTD_drug_target_path': proj_path + 'Pathopticon_external_data/TTD/' + 'P1-07-Drug-TargetMapping.csv',
                         'TTD_target_path': proj_path + 'Pathopticon_external_data/TTD/' + 'P1-01-TTD_target_download.txt',
                         'MODZ_networks_path': proj_path + 'MODZ_networks/',
-                        'CD_networks_path': proj_path + 'CD_networks/'}
+                        'CD_networks_path': proj_path + 'CD_networks/',
+                        
+                        'QUIZ-C_pcp_perturbation_df_dict_path': proj_path + 'Pathopticon_benchmark_outputs/' + 'QUIZ-C_pcp_perturbation_df_dict.pickle',
+                        'MODZ_pcp_perturbation_df_dict_path': proj_path + 'Pathopticon_benchmark_outputs/' + 'MODZ_pcp_perturbation_df_dict.pickle',
+                        'CD_pcp_perturbation_df_dict_path': proj_path + 'Pathopticon_benchmark_outputs/' + 'CD_pcp_perturbation_df_dict.pickle'}
     
     return input_paths_dict
 
