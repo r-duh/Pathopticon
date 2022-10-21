@@ -199,10 +199,10 @@ def get_geneset_targets(geneset_up, geneset_dn, TTD_targID_dict, TTD_drug_target
     geneset_drugID_targetCID = pd.merge(geneset_drugID_targetID, geneset_drugCIDs, left_on='DrugID', right_on='D00AAN', how='left')
 
 
-    # Get the subset of drugs targeting the given pathway above that is within the QRZC drugs by
-    # (1) first getting the lookup table between CIDs, InCHI Keys, SMILES and pert_inames of QRZC compounds;
-    # (2) then subsetting the drugs targeting the given pathway by the ones that are in QRZC, in terms of their pert_inames.
-    # The resulting number of compounds is naturally small since the drugs in QRZC networks are a small subset of all the drugs 
+    # Get the subset of drugs targeting the given pathway above that is within the QUIZC drugs by
+    # (1) first getting the lookup table between CIDs, InCHI Keys, SMILES and pert_inames of QUIZC compounds;
+    # (2) then subsetting the drugs targeting the given pathway by the ones that are in QUIZC, in terms of their pert_inames.
+    # The resulting number of compounds is naturally small since the drugs in QUIZC networks are a small subset of all the drugs 
     # in the TTD database.
 
     geneset_targets_pert_iname = pd.merge(geneset_drugID_targetCID, pert_iname2CID, 
@@ -529,7 +529,7 @@ def run_benchmark(proj_path, proj_output_path, benchmark_path, method_name,
     
     if method_name == 'QUIZ-C':
         print('Processing QUIZ-C networks...', flush=True)
-        edgelist_df_dict, nodelist_df_dict, allcells, allgenes, alldrugs, allnodes = process_QRZC_output(input_paths_dict['pos_edges_dict_path'], 
+        edgelist_df_dict, nodelist_df_dict, allcells, allgenes, alldrugs, allnodes = process_QUIZC_output(input_paths_dict['pos_edges_dict_path'], 
                                                                                                          input_paths_dict['neg_edges_dict_path'],
                                                                                                          input_paths_dict['drugs_dict_path'],
                                                                                                          L1000_gene_info)
