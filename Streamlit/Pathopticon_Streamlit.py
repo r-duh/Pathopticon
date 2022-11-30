@@ -10,10 +10,12 @@ from bokeh.io import show
 from bokeh.layouts import column
 from bokeh.plotting import figure, ColumnDataSource
 from bokeh.models import CustomJS, Select, HoverTool
+import argparse
 
 
-
-proj_path = '/Users/ardahalu/Research/CICS/L1000_project/Pathopticon_all_analyses/'
+parser=argparse.ArgumentParser()
+parser.add_argument('--proj_path', nargs='?', default='/Pathopticon_Streamlit_app/', help="Path to directory where '/Pathopticon_Streamlit_Docker_mount/' is located in the local drive.")
+args = parser.parse_args()
 
 
 st.set_page_config(layout='wide')
@@ -31,15 +33,7 @@ side_radio = st.sidebar.radio(
     ('Start here!', 'Inspect Networks', 'Run Pathopticon', 'Inspect Pathopticon Results')
 )
 
-with st.container():
-	'''
-	# :eyeglasses: **Pathopticon ** 
-	Linking gene and perturbation signatures through their **pathop**heno**t**yp**ic** c**on**gruity
-	***
-	
-	'''
-
-input_paths_dict = input_paths(proj_path)
+input_paths_dict = input_paths(args.proj_path)
 
 
 if side_radio == 'Start here!':
@@ -49,48 +43,78 @@ if side_radio == 'Start here!':
 		st.write(
 		'''
 		### Welcome! 
-		Pathopticon is a computational tool to prioritize drugs that 
+		**What is Pathopticon?** Pathopticon is a drug discovery platform that integrates pharmacogenomic and cheminformatic 
+		data with diverse disease phenotypes to predict cell type-specific candidate drugs for a given disease context.
+		
+		**What does Pathopticon do?** Below, you can find a figure summarizing Pathopticon. Briefly, Pathopticon first creates 
+		cell type-specific gene-perturbation networks using a statistical approach that we call the QUantile-based Instance 
+		Z-score Consensus (QUIZ-C) method. Pathopticon then integrates these cell type-specific gene-perturbation networks 
+		with an "input" gene signature provided by the user (typically differentially up- and down-regulated genes from various 
+		omics experiments). Specifically, it measures the agreement between input and perturbation signatures within a global 
+		network of diverse disease phenotypes using what we call the PAthophenotypic COngruity Score (PACOS). After combining 
+		PACOS with pharmacological activity data, Pathopticon performs a nested prioritization that identifies the most suitable 
+		cell lines for an input gene signature, followed by the perturbations whose transcriptomic response best aligns with 
+		that of the input signature within each cell line. 
 		'''
 		)
+		expander_overview = st.expander(label='Overview figure summarizing the Pathopticon framework')
+		with expander_overview:
+			st.image(args.proj_path + 'Pathopticon_overview_fig.png')
 		
-		st.write('##')
 		st.write(
 		'''
-		In a nutshell, Pathopticon takes as input (i) a gene-perturbation (i.e. drug) network based on Connectivity Map (CMap) data and 
-		(ii) a set of upregulated and downregulated genes. 
-		The gene-perturbation network used by default is one that we developed called **QU**antile-based **I**nstance **Z**-score **C**onsensus (QUIZ-C).
+		**Can I see these cell type-specific networks?** Absolutely, and interactively, too! Just click on the "Inspect Networks" 
+		option in the left panel and it will take you to a page in which you can choose any of the 60 available cell types. You 
+		can then use the dropdown menus to choose drugs or genes of interest, which will be highlighted in the network. You can 
+		pan and zoom in and out of the network, and choose and highlight multiple genes/drugs using the Shift key to create your own
+		subnetwork visualizations.
+			
+		**How do I run Pathopticon myself?** It is very simple -- If you select the "Run Pathopticon" option in the left panel and enter a set 
+		of up- and down-regulated genes, Pathopticon will give you a ranked list of drugs and cell lines, which you can download. 
+		More details on the parameters that can be adjusted can be found under "Run Pathopticon."
+
+		**How do I interpret the results?** 	
 		
-		Here is a primer on how to run Pathopticon and interpret its results.
-		 
-		'''	
-		)
+		'''
+		)		
 		
 		st.write('##')
-		intro_cols = st.columns(3)
-		with intro_cols[0]:
-			'''
-			Inspecting QUIZ-C networks
-			
-			'''
-			st.image(proj_path + 'QUIZ-C_image.png')
-			
-		with intro_cols[1]:
-			'''
-			Entering input genesets
-			
-			'''
-
-		with intro_cols[2]:
-			'''
-			Setting Pathopticon parameters
-			
-			* Model: PACOS/PACOS-Tool to indicate perturbation rankings with respect to pathophenotypic congruity score (PACOS) only or PACOS and Tool score combined.
-			'''
-
+		
+		st.write(
 		'''
-		Citation: Halu A et al. 
-		 
-		'''	
+		**Citation:** Arda Halu, Julius Decano, Joan Matamalas, Mary Whelan, Takaharu Asano, Namitra Kalicharran, 
+		Sasha Singh, Joseph Loscalzo, Masanori Aikawa, _Integrating pharmacogenomics and cheminformatics with diverse 
+		disease phenotypes for cell type-guided drug discovery_
+		'''
+		)		
+# 		
+# 
+# 		
+# 		st.write('##')
+# 
+# 		
+# 		st.write('##')
+# 		intro_cols = st.columns(3)
+# 		with intro_cols[0]:
+# 			'''
+# 			Inspecting QUIZ-C networks
+# 			
+# 			'''
+# 			st.image(args.proj_path + 'QUIZ-C_image.png')
+# 			
+# 		with intro_cols[1]:
+# 			'''
+# 			Entering input genesets
+# 			
+# 			'''
+# 
+# 		with intro_cols[2]:
+# 			'''
+# 			Setting Pathopticon parameters
+# 			
+# 			* Model: PACOS/PACOS-Tool to indicate perturbation rankings with respect to pathophenotypic congruity score (PACOS) only or PACOS and Tool score combined.
+# 			'''
+
 
 
 elif side_radio == 'Inspect Networks':
@@ -100,14 +124,14 @@ elif side_radio == 'Inspect Networks':
 		allcells_list = generate_allcells_list()
 		chosen_cell = st.selectbox('Choose cell type to be displayed', allcells_list)
 	
-		HtmlFile = open(proj_path + 'PACOS_cell_networks/%s_viz.html' % chosen_cell, 'r', encoding='utf-8')
+		HtmlFile = open(args.proj_path + 'PACOS_cell_networks/%s_viz.html' % chosen_cell, 'r', encoding='utf-8')
 		source_code = HtmlFile.read() 
 		components.html(source_code, height = 1200, width=1000)
 		
 	expander_Enrichr = st.expander(label='Inspect the Enrichr Disease-Gene network')
 	with expander_Enrichr:
 	
-		HtmlFile = open(proj_path + 'Enrichr_GEO_disease-gene_network_viz.html', 'r', encoding='utf-8')
+		HtmlFile = open(args.proj_path + 'Enrichr_GEO_disease-gene_network_viz.html', 'r', encoding='utf-8')
 		source_code = HtmlFile.read() 
 		components.html(source_code, height = 1200, width=1000)
 
@@ -134,7 +158,7 @@ elif side_radio == 'Run Pathopticon':
 		form_cols2 = st.columns(3)
 		rr = form_cols2[0].number_input('r value (default=2.0)', value=2.0, step=0.01)
 		Nrand = form_cols2[1].number_input('Number of randomizations (default=400)', 400, step=100) 
-		default_geneset_name, default_up, default_dn = default_input_geneset()
+		default_geneset_name, default_up, default_dn = default_input_geneset(input_paths_dict)
 		geneset_name = form_cols2[2].text_input('Input gene signature name', default_geneset_name)
 	
 		form_cols2 = st.columns(2)
@@ -217,7 +241,7 @@ elif side_radio == 'Run Pathopticon':
 
 				data_load_state = status_msg.text('Running Pathopticon...(this may take a few minutes)')
 				pacos_tool_merged_df = PACOS(pcp_geneset_df, pcp_perturbation_df_dict, alldrugs, allcells,
-											 QUIZC_activityStats_nooutliers_df_besttool, proj_path, method_name=method_name, geneset_name=geneset_name, 
+											 QUIZC_activityStats_nooutliers_df_besttool, args.proj_path, method_name=method_name, geneset_name=geneset_name, 
 											 r=rr, threshold=10, tqdm_off=False)
 				model_auroc_df, model_auprc_df = PACOS_cell_AUC(pacos_tool_merged_df, allcells, geneset_targets, models=[PACOS_model])
 				data_load_state.text('Running Pathopticon...done.')
@@ -238,6 +262,7 @@ elif side_radio == 'Run Pathopticon':
 
 				pacos_nested_df = pacos_nested_df[['Pert_iname', 'Cell_type', '%s' % PACOS_model, '%s_AUROC' % PACOS_model, '%s_AUROC_emp_pval' % PACOS_model]]
 				pacos_nested_df = pacos_nested_df.rename(columns={'%s_AUROC' % PACOS_model: 'AUROC', '%s_AUROC_emp_pval' % PACOS_model: 'AUROC_emp_pval'})
+				pacos_nested_df = pacos_nested_df.sort_values(PACOS_model, ascending=False)
 				results_cont.write(pacos_nested_df)   		
 				filename = '%s_Pathopticon.csv' % geneset_name					
 				csv_b64 = base64.b64encode(pacos_nested_df.to_csv(index=False).encode()).decode()
@@ -271,7 +296,7 @@ elif side_radio == 'Inspect Pathopticon Results':
 		### plot cell type bar graph ### 	
 		pacos_auroc_sorted = st.session_state['pacos_nested_df'][['Cell_type', 'AUROC', 'AUROC_emp_pval']].drop_duplicates().sort_values('AUROC', ascending=False)
 
-		colors = ['red' if o<=0.05 else 'mistyrose' for o in pacos_auroc_sorted['AUROC_emp_pval']]
+		colors = ['red' if o<0.05 else 'mistyrose' for o in pacos_auroc_sorted['AUROC_emp_pval']]
 		source_data2 = {'Cell_type': pacos_auroc_sorted['Cell_type'], 'AUROC': pacos_auroc_sorted['AUROC'], 
 						'AUROC_emp_pval': pacos_auroc_sorted['AUROC_emp_pval'], 'colors': colors} 
 		source_s2 = ColumnDataSource(data=source_data2)

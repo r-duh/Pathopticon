@@ -18,32 +18,6 @@ def generate_allcells_list():
 	return allcells_list
 
 @st.cache(show_spinner=False, allow_output_mutation=True)
-def default_input_geneset():
-	default_geneset_name = 'Jha_SARS-CoV-2_DEgenes'
-	default_up = 'ACSL1\nADD3\nALDH3A1\nAQP3\nATG9B\nBLNK\nCCDC14\nCDH10\nCENPF\nCLCA2\nCPA4\nCREG2\nCTDSPL\nCXCL14\nCYP2B7P1\nCYP4F3\n\
-DEK\nDSG3\nDST\nDUSP10\nENDOD1\nEPHA4\nERF\nF3\nFAM178A\nFAT2\nFAT4\nFLRT3\nFOXO1\nFYB\nGBP6\nGCLC\nGPNMB\nGPSM2\n\
-GULP1\nHSD17B3\nIFITM10\nIL6R\nKCNMA1\nLCA5\nLRMP\nLY6D\nMAF\nMAP7D2\nMCOLN3\nMETTL7A\nMN1\nMTUS1\nMUC20\nMXRA5\n\
-MYLK\nNANOS1\nNID1\nNMRK1\nNPNT\nNR1D2\nNR2F2\nNRP1\nOLFML2A\nPADI3\nPALMD\nPCDH7\nPDCD4\nPPARGC1A\nPRKACB\nPROS1\n\
-PRSS23\nPTPRZ1\nRAB30\nRBM20\nRPL9\nSCOC\nSCP2\nSEPP1\nSERPINB13\nSESN3\nSLAMF7\nSLC26A2\nSLITRK6\nSMEK2\nSOX6\nSPARC\n\
-SPTLC3\nSTON1\nTCF4\nTHBD\nTIMP3\nTP53INP1\nTSC22D3\nVAV3\nVTCN1\nZNF488'
-	default_dn = 'ACLY\nACTN1\nADRB2\nALDH1A3\nALOX15B\nANGPTL4\nANXA3\nASS1\nATP1B1\nB4GALT2\nBCL2A1\nBCL3\nBID\nBIRC3\nBMP2\nBST2\n\
-C15orf48\nC15orf52\nC1QTNF1\nC1S\nC2orf54\nC8orf4\nCCDC24\nCCT5\nCD82\nCDC25B\nCDC42EP2\nCDCP1\nCES1P1\nCFB\nCOL12A1\n\
-COL8A1\nCRCT1\nCSF2\nCSF3\nCSNK1E\nCSRP1\nCTPS1\nCXCL1\nCXCL16\nCXCL2\nCXCL3\nCXCL5\nCXCL6\nCYP27B1\nDDX58\nDRAM1\nDTX2\n\
-DUSP1\nEDN1\nEFNA1\nELOVL1\nEPHA2\nERRFI1\nETS1\nFAM129A\nFAM167A\nFDPS\nFEZ1\nFLNB\nFOSL1\nFST\nG0S2\nGBP5\nGJB2\nGJB3\n\
-HAS3\nHBEGF\nHCAR3\nHDGF\nHELZ2\nHEPHL1\nHERC6\nHK2\nHMOX2\nHSD11B1\nHYI\nICAM1\nIDI1\nIER3\nIFI44\nIFI44L\nIFI6\nIFIH1\n\
-IFIT1\nIFIT3\nIFITM3\nIFNGR1\nIGFBP3\nIL1A\nIL1B\nIL32\nIL36G\nIL7R\nIRAK2\nIRAK3\nIRF7\nIRF9\nISG20L2\nITGA5\nITGB3\n\
-IVL\nKCTD11\nKIAA0247\nKRT16\nKRT17\nKRT23\nKRT24\nKRT4\nKYNU\nLCN2\nLDLR\nLIF\nLOC100862671\nLTB\nLTBP2\nMAFF\nMAP3K8\n\
-MFSD2A\nMICAL2\nMMP1\nMMP13\nMMP9\nMRGPRX3\nMTSS1\nMX1\nMX2\nMYC\nMYEOV\nNAMPT\nNCF2\nNEDD9\nNEURL1B\nNFKB2\nNFKBIZ\n\
-NLRP1\nNRCAM\nOAS1\nOAS2\nOAS3\nOSBP2\nOTUB2\nP2RY6\nPARP12\nPARP9\nPDGFB\nPDZK1IP1\nPGLYRP4\nPI3\nPLAT\nPLAU\nPLAUR\n\
-PLSCR1\nPOU2F2\nPPP1R15A\nPRDM1\nPRELID1\nPRSS3\nPSME2\nPTAFR\nPTGS2\nRAB11FIP1\nRELB\nRFTN1\nRHOF\nRHOV\nS100A12\n\
-S100A7\nS100A8\nS100A9\nS100P\nSAA2\nSAMD4A\nSAMD9L\nSAMHD1\nSAT1\nSBNO2\nSDC4\nSEMA4B\nSEMA7A\nSERPINA3\nSERPINB1\n\
-SERPINB2\nSERPINB8\nSGPP2\nSH3KBP1\nSH3PXD2B\nSLAMF9\nSLC11A2\nSLC25A28\nSLC25A37\nSLC43A3\nSLC6A14\nSMAD3\nSMTN\nSOCS3\n\
-SOD2\nSPRR1A\nSPRR1B\nSPRR2A\nSPRR2D\nSPRR2E\nSQRDL\nSTAP2\nSTAT1\nSTK25\nTAP1\nTFPI2\nTGFA\nTGM2\nTLCD1\nTLR2\nTNC\nTNF\n\
-TNFAIP2\nTNFAIP3\nTNFRSF10A\nTNFSF14\nTNIP1\nTRAF3\nTRIM16\nTRIM47\nTRIML2\nTUBA1B\nTUBA1C\nTUBA4A\nTUBB\nTUBB4B\nTUFM\n\
-TYMP\nUBE2L6\nUFD1L\nUSP54\nVARS\nVEGFA\nVNN1\nVNN3\nWNT7A\nWWC1\nXAF1\nXDH\nZBED2\nZC3H12A\nZC3H12C\nZSWIM4'
-	return default_geneset_name, default_up, default_dn
-		
-@st.cache(show_spinner=False, allow_output_mutation=True)
 def pandas_read_csv_tocache(f):
 	out = pd.read_csv(f)
 	return out
@@ -60,6 +34,11 @@ def input_paths(proj_path):
     input_paths_dict = {'QUIZC_cids_inchi_smiles_path': proj_path + 'Pathopticon_intermediary_outputs/' + 'QUIZC_drug_CIDs_inchi_smiles.csv',
                         'tool_path': proj_path + 'Pathopticon_intermediary_outputs/' + 'QUIZC_activityStats_nooutliers_df_besttool.csv',
                         'benchmark_genesets_path': proj_path + 'Pathopticon_intermediary_outputs/' + 'benchmark_genesets.csv',
+                        
+                        'VG_early_up_path': proj_path + 'Pathopticon_intermediary_outputs/' + 'VG_early_up.csv',
+                        'VG_early_dn_path': proj_path + 'Pathopticon_intermediary_outputs/' + 'VG_early_dn.csv',
+                        'VG_late_up_path': proj_path + 'Pathopticon_intermediary_outputs/' + 'VG_late_up.csv',
+                        'VG_late_dn_path': proj_path + 'Pathopticon_intermediary_outputs/' + 'VG_late_dn.csv',
                         
                         'L1000_gene_info_path': proj_path + 'Pathopticon_external_data/L1000/' + 'GSE92742_Broad_LINCS_gene_info.txt',
                         'L1000_cell_info_path': proj_path + 'Pathopticon_external_data/L1000/' + 'GSE92742_Broad_LINCS_cell_info.txt',
@@ -86,6 +65,24 @@ def input_paths(proj_path):
                         'benchmark_path': proj_path + 'Pathopticon_benchmark_outputs/'}
     
     return input_paths_dict
+
+@st.cache(show_spinner=False, allow_output_mutation=True)
+def default_input_geneset(input_paths_dict):
+	default_geneset_name = 'Vein_Graft_Early_Signature'
+	default_up_list = []
+	f = open(input_paths_dict['VG_early_up_path'], 'r')
+	for line in f:
+		default_up_list.append(line.strip('\n'))
+	default_dn_list = []
+	f = open(input_paths_dict['VG_early_dn_path'], 'r')
+	for line in f:
+		default_dn_list.append(line.strip('\n'))
+	
+	default_up = '\n'.join(default_up_list)
+	default_dn = '\n'.join(default_dn_list)
+	
+	return default_geneset_name, default_up, default_dn
+
 
 @st.cache(show_spinner=False, allow_output_mutation=True)  
 def import_L1000_metadata(L1000_gene_info_path, L1000_cell_info_path, L1000_inst_info_path, L1000_pert_info_path, L1000_sig_info_path):
