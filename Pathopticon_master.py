@@ -5,6 +5,7 @@ import numpy as np
 import os
 import networkx as nx
 import scipy.stats as st
+import statsmodels.api as sm
 
 
 def input_paths(proj_path):
@@ -35,9 +36,7 @@ def input_paths(proj_path):
                         'MODZ_networks_path': proj_path + 'MODZ_networks/',
                         'CD_networks_path': proj_path + 'CD_networks/',
                         
-                        'QUIZ-C_pcp_perturbation_df_dict_path': proj_path + 'Pathopticon_benchmark_outputs/' + 'QUIZ-C_pcp_perturbation_df_dict.pickle',
-                        'MODZ_pcp_perturbation_df_dict_path': proj_path + 'Pathopticon_benchmark_outputs/' + 'MODZ_pcp_perturbation_df_dict.pickle',
-                        'CD_pcp_perturbation_df_dict_path': proj_path + 'Pathopticon_benchmark_outputs/' + 'CD_pcp_perturbation_df_dict.pickle'}
+                        'benchmark_path': proj_path + 'Pathopticon_benchmark_outputs/'}
     
     return input_paths_dict
 
@@ -719,3 +718,60 @@ def calculate_selectivity_tool(activityStats_df, QUIZC_cids_inchi_smiles, iqr_cu
     QUIZC_activityStats_nooutliers_df_bestselectivity.to_csv(proj_intermediary_outputs_path + 'QUIZC_activityStats_nooutliers_df_bestselectivity.csv', index=False)
     
     return QUIZC_activityStats_nooutliers_df_besttool, QUIZC_activityStats_nooutliers_df_bestselectivity
+    
+    
+# Fisher's Exact test-based overlap
+def two_geneset_overlap(genesetA_dict, genesetB_dict, universe_geneset, outfile):
+
+    overlap_df = pd.DataFrame(index=genesetA_dict.keys(), columns=genesetB_dict.keys())
+    fisher_pval_df = pd.DataFrame(index=genesetA_dict.keys(), columns=genesetB_dict.keys())
+    fisher_OR_df = pd.DataFrame(index=genesetA_dict.keys(), columns=genesetB_dict.keys())
+
+    for dt1, dt2 in product(genesetA_dict.keys(), genesetB_dict.keys()):
+
+        A = len(set(genesetA_dict[dt1]) & set(genesetB_dict[dt2]))
+        B = len(set(genesetA_dict[dt1]) - set(genesetB_dict[dt2]))
+        C = len(set(genesetB_dict[dt2]) - set(genesetA_dict[dt1]))
+        D = len(universe_geneset) - len(set(genesetA_dict[dt1]) | set(genesetB_dict[dt2]))
+
+        overlap_df.at[dt1, dt2] = A
+        fisher_OR_df.at[dt1, dt2] = st.fisher_exact([[A, B], [C, D]])[0]
+        fisher_pval_df.at[dt1, dt2] = st.fisher_exact([[A, B], [C, D]])[1]
+
+    overlap_df.to_csv(outfile + '_overlap.csv')
+    fisher_OR_df.to_csv(outfile + '_fisher_OR.csv')
+    fisher_pval_df.to_csv(outfile + '_fisher_pval.csv')
+   
+    return overlap_df, fisher_OR_df, fisher_pval_df
+    
+    
+# Fisher's Exact test-based overlap
+def fisher_pathway_enrichment(pathway_geneset_dict, input_geneset_dict, universe_geneset, method, outfile):
+
+    overlap_df = pd.DataFrame(index=pathway_geneset_dict.keys(), columns=input_geneset_dict.keys())
+    fisher_pval_df = pd.DataFrame(index=pathway_geneset_dict.keys(), columns=input_geneset_dict.keys())
+    fisher_adjpval_df = pd.DataFrame(index=pathway_geneset_dict.keys(), columns=input_geneset_dict.keys())
+    fisher_OR_df = pd.DataFrame(index=pathway_geneset_dict.keys(), columns=input_geneset_dict.keys())
+
+    for dt1, dt2 in product(pathway_geneset_dict.keys(), input_geneset_dict.keys()):
+
+        A = len(set(pathway_geneset_dict[dt1]) & set(input_geneset_dict[dt2]))
+        B = len(set(pathway_geneset_dict[dt1]) - set(input_geneset_dict[dt2]))
+        C = len(set(input_geneset_dict[dt2]) - set(pathway_geneset_dict[dt1]))
+        D = len(universe_geneset) - len(set(pathway_geneset_dict[dt1]) | set(input_geneset_dict[dt2]))
+
+        overlap_df.at[dt1, dt2] = A
+        fisher_OR_df.at[dt1, dt2] = st.fisher_exact([[A, B], [C, D]])[0]
+        fisher_pval_df.at[dt1, dt2] = st.fisher_exact([[A, B], [C, D]])[1]
+
+    for dt2 in input_geneset_dict.keys():
+        fisher_adjpval_df[dt2] = pd.Series(sm.stats.multipletests(fisher_pval_df[dt2], alpha=0.05, method=method)[1], index=fisher_pval_df.index)
+        
+    overlap_df.to_csv(outfile + '_overlap.csv')
+    fisher_OR_df.to_csv(outfile + '_fisher_OR.csv')
+    fisher_pval_df.to_csv(outfile + '_fisher_pval.csv')
+    fisher_adjpval_df.to_csv(outfile + '_fisher_adjpval.csv')
+   
+    return overlap_df, fisher_OR_df, fisher_pval_df, fisher_adjpval_df
+    
+    
