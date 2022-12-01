@@ -35,3 +35,32 @@ lines were significant, and let you access the ranked list of drugs within each 
 inspect the diseases with similar gene signatures, and finally focus on a disease to see a subnetwork consisting of the input 
 signature, the chosen disease's gene signature and the chosen drug.		
 
+***
+
+### Description of the Pathopticon Parameters
+
+**Model:** Tells Pathopticon which scoring model to use. The two options are (i) PACOS (pharmacogenomic data) only and 
+(ii) PACOS combined with Tool scores (pharmacogenomic data combined with cheminformatic data). The default option is the 
+latter.
+
+**Effect:** Tells Pathopticon which kind of perturbations to look for. The two options are (i) Repress, which ranks drugs 
+according to how well they repress, or reverse, the input gene signature, and (ii) Enhance, which ranks drugs according to how well they enhance, or mimic, the 
+input gene signature. The default option is Repress.
+
+**Gene-perturbation network:** Tells Pathopticon which type of gene-perturbation network to use as the underlying network 
+on which to make predictions. The three options are (i) QUIZ-C, (ii) MODZ and (iii) CD. The details on these networks 
+can be found our manuscript. The default is QUIZ-C, which is the method we propose in this study.
+
+**r-value:** The weight Pathopticon uses to balance the effect of pharmacogenomic data and cheminformatic data when combining
+the two. This option is required for the combined PACOS-Tool model. r < 1 biases the combined score in favor of Tool scores 
+and r > 1 biases the combined score in favor of PACOS scores. Based on our sensitivity analyses, the default value is 2.
+
+**Number of randomizations:** The number of randomizations with which to calculate empirical p-values. The default value is 
+400, which results in an empirical p-value resolution of 1/400 = 0.0025. Higher values will increase p-value resolution, but 
+will also increase computation time.
+
+**Input gene signature name:** The name defined by the user to describe the input signature. This will also be the name of the
+output .csv file, so we recommend using underscores ("_") instead of spaces.
+
+**Input gene signature - Up/Down genes:** The list of genes to be used as the input signature, which will be provided by the user. These are 
+typically up- and down-regulated genes from omics experiments.
