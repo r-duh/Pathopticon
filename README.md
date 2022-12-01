@@ -66,3 +66,7 @@ output .csv file, so we recommend using underscores ("_") instead of spaces.
 
 **Input gene signature - Up/Down genes:** The list of genes to be used as the input signature, which will be provided by the user. These are 
 typically up- and down-regulated genes from omics experiments.
+
+***
+
+## Installing Pathopticon
