@@ -4,9 +4,6 @@
 Sasha Singh, Joseph Loscalzo, Masanori Aikawa, "Integrating pharmacogenomics and cheminformatics with diverse 
 disease phenotypes for cell type-guided drug discovery"
 
-![Overview of the Pathopticon framework](https://github.com/r-duh/Pathopticon/blob/main/Pathopticon_overview_fig.png?raw=true)
-
-
 ***
 
 ### Welcome! 
@@ -37,6 +34,8 @@ can download. More details on the individual parameters can be found under "Run 
 lines were significant, and let you access the ranked list of drugs within each cell line. You can then choose a drug and 
 inspect the diseases with similar gene signatures, and finally focus on a disease to see a subnetwork consisting of the input 
 signature, the chosen disease's gene signature and the chosen drug.		
+
+![Overview of the Pathopticon framework](https://github.com/r-duh/Pathopticon/blob/main/Pathopticon_overview_fig.png?raw=true)
 
 ***
 
