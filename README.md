@@ -4,6 +4,9 @@
 Sasha Singh, Joseph Loscalzo, Masanori Aikawa, "Integrating pharmacogenomics and cheminformatics with diverse 
 disease phenotypes for cell type-guided drug discovery"
 
+![Overview of the Pathopticon framework](https://github.com/r-duh/Pathopticon/blob/main/Pathopticon_overview_fig.png?raw=true)
+
+
 ***
 
 ### Welcome! 
