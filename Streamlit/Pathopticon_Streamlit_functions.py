@@ -404,8 +404,8 @@ def PACOS(PCP_geneset_df, PCP_perturbation_df_dict, alldrugs, allcells, tool_sco
                 common_diseases = set(PCP_geneset_df.loc[geneset_name][~pd.isnull(PCP_geneset_df.loc[geneset_name])].index) &\
                                     set(PCP_perturbation_df_dict[drug].loc[c][~pd.isnull(PCP_perturbation_df_dict[drug].loc[c])].index)
                 if len(common_diseases) >= threshold:
-                    PACOS_spearman_rho_df.at[drug, c], PACOS_spearman_pval_df.at[drug, c] = sc.spearmanr(PCP_geneset_df.loc[geneset_name][common_diseases], 
-                                                                      PCP_perturbation_df_dict[drug].loc[c][common_diseases])
+                    PACOS_spearman_rho_df.at[drug, c], PACOS_spearman_pval_df.at[drug, c] = sc.spearmanr(PCP_geneset_df.loc[geneset_name][list(common_diseases)], 
+                                                                      PCP_perturbation_df_dict[drug].loc[c][list(common_diseases)])
 
         PACOS_spearman_rho_df[pd.isnull(PACOS_spearman_rho_df)] = -666
         sorted_ix = np.argsort(PACOS_spearman_rho_df.values.flatten())
