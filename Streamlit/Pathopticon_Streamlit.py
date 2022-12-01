@@ -87,34 +87,6 @@ if side_radio == 'Start here!':
 		disease phenotypes for cell type-guided drug discovery"
 		'''
 		)		
-# 		
-# 
-# 		
-# 		st.write('##')
-# 
-# 		
-# 		st.write('##')
-# 		intro_cols = st.columns(3)
-# 		with intro_cols[0]:
-# 			'''
-# 			Inspecting QUIZ-C networks
-# 			
-# 			'''
-# 			st.image(args.proj_path + 'QUIZ-C_image.png')
-# 			
-# 		with intro_cols[1]:
-# 			'''
-# 			Entering input genesets
-# 			
-# 			'''
-# 
-# 		with intro_cols[2]:
-# 			'''
-# 			Setting Pathopticon parameters
-# 			
-# 			* Model: PACOS/PACOS-Tool to indicate perturbation rankings with respect to pathophenotypic congruity score (PACOS) only or PACOS and Tool score combined.
-# 			'''
-
 
 
 elif side_radio == 'Inspect Networks':
@@ -136,11 +108,6 @@ elif side_radio == 'Inspect Networks':
 		components.html(source_code, height = 1200, width=1000)
 
 elif side_radio == 'Run Pathopticon':
-
-# 	expander_input_desc = st.expander(label='Start here! How to use.')
-# 	with expander_input_desc:	
-# 		st.write('* Model: PACOS/PACOS-Tool to indicate perturbation rankings with respect to pathophenotypic congruity score (PACOS) only or PACOS and Tool score combined.')
-# 		st.write('')	
 
 	expander_run_info = st.expander(label='Description of Pathopticon parameters')
 	with expander_run_info:
@@ -197,7 +164,6 @@ elif side_radio == 'Run Pathopticon':
 		input_up = form_cols2[0].text_area('Input gene signature: Up genes', default_up)
 		input_dn = form_cols2[1].text_area('Input gene signature: Down genes', default_dn)
 		submit_button = st.form_submit_button(label='Submit job to Pathopticon')
-		#path = st.text_input('CSV file path')
 
 		if (mm1=='PACOS') & (mm2=='Enhance'):
 			PACOS_model = 'PACOS_Spearman_rho'
@@ -257,6 +223,12 @@ elif side_radio == 'Run Pathopticon':
 																												 L1000_gene_info)
 				else:
 					edgelist_df_dict, nodelist_df_dict, allcells, allgenes, alldrugs, allnodes = import_CD_MODZ_networks(input_paths_dict['%s_networks_path' % method_name])				
+				
+				if len(set(alldrugs) & set(geneset_targets)) == 0:
+					st.error('None of true positives (i.e. drugs targeting the input genes) is available in the chosen gene-perturbation networks (%s), preventing the calculation of AUROCs.\
+							Please consider choosing a different set of gene-perturbation networks.' % method_name)
+					st.stop()
+				
 				diG_dict = generate_diG_dict(nodelist_df_dict, edgelist_df_dict, allcells)
 				data_load_state.text('Processing %s networks...done.' %method_name)
 
@@ -333,16 +305,13 @@ elif side_radio == 'Inspect Pathopticon Results':
 						'AUROC_emp_pval': pacos_auroc_sorted['AUROC_emp_pval'], 'colors': colors} 
 		source_s2 = ColumnDataSource(data=source_data2)
 		hover2 = HoverTool(tooltips=[('Cell type', '@Cell_type'), ('AUROC', '@AUROC'), ('AUROC emp. p-value', '@AUROC_emp_pval')])
-		s2 = figure(x_range=pacos_auroc_sorted['Cell_type'], plot_width=800, plot_height=300, tools='save, wheel_zoom, pan, reset')
+		s2 = figure(x_range=pacos_auroc_sorted['Cell_type'], width=800, height=300, tools='save, wheel_zoom, pan, reset')
 		s2.vbar(x='Cell_type', top='AUROC', source=source_s2, color='colors', width=0.8, alpha=0.8)
 		s2.xaxis.major_label_orientation = "vertical"
 		s2.add_tools(hover2) 
 		s2.background_fill_alpha = 0
 		s2.border_fill_alpha = 0
 		s2.yaxis.axis_label = 'AUROC'
-		#s2.xaxis.axis_label = 'Cell type'
-		#s2.xaxis.axis_label_text_font_style = "normal"
-		# st.bokeh_chart(column(s1, s2))
 		st.bokeh_chart(s2, use_container_width=True)
 
 		expander2 = st.expander(label='Accessing perturbation rankings:')
@@ -355,10 +324,8 @@ elif side_radio == 'Inspect Pathopticon Results':
 		chosen_cell = st.selectbox('Filter by cell type', np.concatenate([['All'], allcells]))
 	
 		if chosen_cell == 'All':
-			#st.subheader('PACOS nested')
 			st.write(st.session_state['pacos_nested_df'])   		
 		else:
-			#st.subheader('PACOS nested')
 			pacos_nested_df_filt = st.session_state['pacos_nested_df'][st.session_state['pacos_nested_df']['Cell_type']==chosen_cell]
 			st.write(pacos_nested_df_filt)   
 
@@ -374,7 +341,6 @@ elif side_radio == 'Inspect Pathopticon Results':
 		
 			temp_common_diseases = list(set(st.session_state['pcp_geneset_df'].loc[st.session_state['geneset_name']][~pd.isnull(st.session_state['pcp_geneset_df'].loc[st.session_state['geneset_name']])].index) &\
 										set(st.session_state['pcp_perturbation_df_dict'][chosen_drug].loc[chosen_cell][~pd.isnull(st.session_state['pcp_perturbation_df_dict'][chosen_drug].loc[chosen_cell])].index))
-			#temp_common_diseases_short = [s.split(' human')[0] for s in temp_common_diseases]
 			
 			source_data3 = {'SCS_gd': st.session_state['pcp_geneset_df'].loc[st.session_state['geneset_name']][temp_common_diseases].values,
 							'SCS_cpd': st.session_state['pcp_perturbation_df_dict'][chosen_drug].loc[chosen_cell][temp_common_diseases].values, 
@@ -382,7 +348,7 @@ elif side_radio == 'Inspect Pathopticon Results':
 			source_s3 = ColumnDataSource(data=source_data3)
 					
 			hover3 = HoverTool(tooltips=[('SCS_gd', '@SCS_gd'), ('SCS_cpd', '@SCS_cpd'), ('Pathophenotype', '@Pathophenotype')])
-			s3 = figure(plot_width=650, plot_height=500, tools='save, wheel_zoom, pan, reset')
+			s3 = figure(width=650, height=500, tools='save, wheel_zoom, pan, reset')
 			s3.circle(x='SCS_gd', y='SCS_cpd', source=source_s3, size=20, color='red', alpha=0.25)
 			s3.add_tools(hover3) 
 			s3.background_fill_alpha = 0
