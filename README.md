@@ -71,7 +71,7 @@ typically up- and down-regulated genes from omics experiments.
 
 ## Installing and running the Pathopticon Streamit app
 
-We have two options: 
+There are two options to install and run Pathopticon: 
 
 #### 1) Run Pathopticon Streamlit app as a Docker container (requires [Docker installation](https://docs.docker.com/get-docker/))
 This option is somewhat slower to run but has the advantage of not depending on the specific package environment and operating system of the user.
@@ -80,12 +80,12 @@ This option is somewhat slower to run but has the advantage of not depending on 
 ```
 docker pull rduh/pathopticon-streamlit:slim
 ```
-or loaded from the [.tar file]() using
+or loaded from the [.tar file](https://www.dropbox.com/s/uf6cx1d21vwttju/pathopticon_streamlit_slim.tar?dl=0) using
 ```
 docker load --input pathopticon_streamlit_slim.tar
 ```
 
-- [Download]() the Pathopticon folder to be mounted as a volume to the Docker container. This local folder (i.e., located in the user's machine), named /Pathopticon_Streamlit_Docker_mount/, will act as the main folder in which Pathopticon Streamlit app's container will read and write files.
+- [Download](https://www.dropbox.com/sh/mh9v3ge3mguqoix/AAAjZTEcg6Lvp7RZXAhKVdPFa?dl=0) the Pathopticon folder to be mounted as a volume to the Docker container. This local folder (i.e., located in the user's machine), named /Pathopticon_Streamlit_Docker_mount/, will act as the main folder in which Pathopticon Streamlit app's container will read and write files.
 
 - To run the Pathopticon Streamlit app as a Docker container, type in the below command in the terminal. /path/to/Pathopticon_Streamlit_Docker_mount/ is where the folder you downloaded above is located in your computer. 
 ```
