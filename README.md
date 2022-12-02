@@ -69,4 +69,52 @@ typically up- and down-regulated genes from omics experiments.
 
 ***
 
-## Installing Pathopticon
+## Installing and running the Pathopticon Streamit app
+
+We have two options: 
+
+#### 1) Run Pathopticon Streamlit app as a Docker container (requires [Docker installation](https://docs.docker.com/get-docker/))
+This option is somewhat slower to run but has the advantage of not depending on the specific package environment and operating system of the user.
+
+- Once Docker is installed, the Pathopticon image "rduh/pathopticon-streamlit:slim" can either be pulled from Docker Hub
+```
+docker pull rduh/pathopticon-streamlit:slim
+```
+or loaded from the [.tar file]() using
+```
+docker load --input pathopticon_streamlit_slim.tar
+```
+
+- [Download]() the Pathopticon folder to be mounted as a volume to the Docker container. This local folder (i.e., located in the user's machine), named /Pathopticon_Streamlit_Docker_mount/, will act as the main folder in which Pathopticon Streamlit app's container will read and write files.
+
+- To run the Pathopticon Streamlit app as a Docker container, type in the below command in the terminal. /path/to/Pathopticon_Streamlit_Docker_mount/ is where the folder you downloaded above is located in your computer. 
+```
+docker run -it -v /path/to/Pathopticon_Streamlit_Docker_mount/:/Pathopticon_Streamlit_app/ -p 8501:8501 rduh/pathopticon-streamlit:slim
+```
+
+- Finally, to see the Streamlit app, go to your browser and enter the address that appears in your terminal (It looks like this: "You can now view your Streamlit app in your browser. URL: `http://0.0.0.0:8501` "). So, typically `http://0.0.0.0:8501`. If you have more than one Streamlit instance running, this can be `http://0.0.0.0:8502`, `http://0.0.0.0:8503`, and so on.
+
+
+#### 2) Run the Pathopticon Streamlit app script directly (requires conda to be installed). 
+This is the faster option but requires familiarity with creating environments and running scripts.
+- If not already done so, install [conda](https://conda.io/projects/conda/en/latest/user-guide/install/index.html) on your system. Next, type the following commands in your command prompt, or terminal, in the following order to set up and run Pathopticon.
+- Using Conda, create a new environment named "pathopticon_streamlit" (or any name of your choosing) for the Pathopticon Streamlit app and install in it the dependencies needed by the app using the Pathopticon_Streamlit_requirements.yml file in /path/to/Pathopticon_Streamlit_Docker_mount/ (also available in the project GitHub [page](https://github.com/r-duh/Pathopticon/blob/main/Streamlit/Pathopticon_Streamlit_environment.yml)): 
+```
+conda env create -n pathopticon_streamlit -f /path/to/Pathopticon_Streamlit_Docker_mount/Pathopticon_Streamlit_environment.yml
+```
+- Activate the newly created Conda environment:
+```
+conda activate pathopticon_streamlit
+```
+- You have now created a new conda environment and installed in it all the packages the Pathopticon Streamlit app needs to run. The only remaining step is to run it. First, navigate to /path/to/Pathopticon_Streamlit_Docker_mount/
+```
+cd /path/to/Pathopticon_Streamlit_Docker_mount/
+```
+Then, run the streamlit run by typing the below command (note that it has the additional --proj_path flag, which needs to be set to the Pathopticon Streamlit app directory
+```
+streamlit run Pathopticon_Streamlit.py -- --proj_path=/path/to/Pathopticon_Streamlit_Docker_mount/
+```
+
+- Finally, to see the Streamlit app, go to your browser and enter the address that appears in your terminal (It looks like this: "You can now view your Streamlit app in your browser. URL: `http://0.0.0.0:8501` "). So, typically `http://0.0.0.0:8501`. If you have more than one Streamlit instance running, this can be `http://0.0.0.0:8502`, `http://0.0.0.0:8503`, and so on.
+
+
