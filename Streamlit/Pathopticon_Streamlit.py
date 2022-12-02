@@ -224,11 +224,6 @@ elif side_radio == 'Run Pathopticon':
 				else:
 					edgelist_df_dict, nodelist_df_dict, allcells, allgenes, alldrugs, allnodes = import_CD_MODZ_networks(input_paths_dict['%s_networks_path' % method_name])				
 				
-				if len(set(alldrugs) & set(geneset_targets)) == 0:
-					st.error('None of true positives (i.e. drugs targeting the input genes) is available in the chosen gene-perturbation networks (%s), preventing the calculation of AUROCs.\
-							Please consider choosing a different set of gene-perturbation networks.' % method_name)
-					st.stop()
-				
 				diG_dict = generate_diG_dict(nodelist_df_dict, edgelist_df_dict, allcells)
 				data_load_state.text('Processing %s networks...done.' %method_name)
 
@@ -249,7 +244,14 @@ elif side_radio == 'Run Pathopticon':
 											 r=rr, threshold=10, tqdm_off=False)
 				model_auroc_df, model_auprc_df = PACOS_cell_AUC(pacos_tool_merged_df, allcells, geneset_targets, models=[PACOS_model])
 				data_load_state.text('Running Pathopticon...done.')
-
+				
+				if model_auroc_df['%s_AUROC' % PACOS_model].isnull().all():
+					st.error('PACOS found no significant cell lines for the given input gene signatures, which precludes Pathopticon from \
+					reliably calculating AUROCs. This is likely due to the insufficient number of true positives (i.e. drugs targeting the \
+					input genes). If keeping the same input gene signature, you can consider choosing different gene-perturbation networks. \
+					Alternatively, you can consider expanding the input gene signatures.')
+					st.stop()
+				
 				data_load_state = status_msg.text('Performing cell line-specific randomization...(this may take a few minutes)')
 				rand_model_auroc_df_dict, rand_model_auprc_df_dict = PACOS_cell_AUC_randomize(pacos_tool_merged_df, allcells, 
 																							  geneset_targets, 
@@ -285,7 +287,7 @@ elif side_radio == 'Run Pathopticon':
 	
 			else:
 				st.error('The number of true positives (i.e. drugs targeting the input genes) is too small to reliably calculate AUROCs. \
-							Please consider expanding the input genesets.')			
+							Please consider expanding the input gene signatures.')			
 	
 			
 elif side_radio == 'Inspect Pathopticon Results':
