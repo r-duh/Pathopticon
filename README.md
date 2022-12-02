@@ -117,4 +117,7 @@ streamlit run Pathopticon_Streamlit.py -- --proj_path=/path/to/Pathopticon_Strea
 
 - Finally, to see the Streamlit app, go to your browser and enter the address that appears in your terminal (It looks like this: "You can now view your Streamlit app in your browser. URL: `http://0.0.0.0:8501` "). So, typically `http://0.0.0.0:8501`. If you have more than one Streamlit instance running, this can be `http://0.0.0.0:8502`, `http://0.0.0.0:8503`, and so on.
 
+***
 
+# Contact:
+Created and maintained by Arda Halu. For requests for assistance, email arda.halu@channing.harvard.edu.
