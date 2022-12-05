@@ -1,5 +1,5 @@
 # :eyeglasses: Pathopticon: 
-Linking gene and perturbation signatures through their <u>patho</u> phenotypic congruity
+Linking gene and perturbation signatures through their <ins>patho</ins> phenotypic congruity
 
 **Citation:** Arda Halu, Julius Decano, Joan Matamalas, Mary Whelan, Takaharu Asano, Namitra Kalicharran, 
 Sasha Singh, Joseph Loscalzo, Masanori Aikawa, "Integrating pharmacogenomics and cheminformatics with diverse 
