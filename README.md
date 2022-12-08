@@ -1,4 +1,4 @@
-# :eyeglasses: Pathopticon: Linking gene and perturbation signatures through their <ins>pathop</ins>heno<ins>t</ins>yp<ins>i</ins> <ins>con</ins>gruity
+# :eyeglasses: Pathopticon: Linking gene and perturbation signatures through their <ins>pathop</ins>heno<ins>t</ins>yp<ins>ic</ins> <ins>con</ins>gruity
 
 **Citation:** Arda Halu, Julius Decano, Joan Matamalas, Mary Whelan, Takaharu Asano, Namitra Kalicharran, 
 Sasha Singh, Joseph Loscalzo, Masanori Aikawa, "Integrating pharmacogenomics and cheminformatics with diverse 
