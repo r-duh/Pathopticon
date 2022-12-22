@@ -3,6 +3,7 @@
 **Citation:** Arda Halu, Julius Decano, Joan Matamalas, Mary Whelan, Takaharu Asano, Namitra Kalicharran, 
 Sasha Singh, Joseph Loscalzo, Masanori Aikawa, "Integrating pharmacogenomics and cheminformatics with diverse 
 disease phenotypes for cell type-guided drug discovery"
+Preprint URL: https://www.biorxiv.org/content/10.1101/2022.12.21.521456v1
 
 ***
 
