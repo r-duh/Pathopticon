@@ -628,8 +628,12 @@ def get_topN_tanimoto(ranked_df_path, benchmark_genesets, apfp_Tanimoto_pert_ina
             top50_tanimoto_dict[geneset_name] = temp_tanimoto_df['Tanimoto coefficient'].to_numpy()
             
     elif method_name == 'L1000CDS2':
-        with open(ranked_df_path + 'L1000CDS2_result_df_dict.pickle', 'rb') as handle:
-            L1000CDS2_result_df_dict = pickle.load(handle)        
+        if '_reverse' in model:
+			with open(ranked_df_path + 'L1000CDS2_result_df_dict_rev.pickle', 'rb') as handle:
+				L1000CDS2_result_df_dict = pickle.load(handle)
+		else:
+			with open(ranked_df_path + 'L1000CDS2_result_df_dict_fwd.pickle', 'rb') as handle:
+				L1000CDS2_result_df_dict = pickle.load(handle)		     
         for geneset_name in tqdm(benchmark_genesets['Geneset_name'].to_numpy(), position=0, leave=True): 
             rank_df = L1000CDS2_result_df_dict[geneset_name]
             combined_topN = rank_df['pert_iname'].unique()[0:topN]
