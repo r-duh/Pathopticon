@@ -59,7 +59,7 @@ if side_radio == 'Start here!':
 		)
 		expander_overview = st.expander(label='Overview of the Pathopticon framework')
 		with expander_overview:
-			st.image(args.proj_path + 'Pathopticon_overview_fig.png')
+			st.image(args.proj_path + 'Pathopticon_overview_fig_v2.png')
 		
 		st.write(
 		'''
@@ -82,7 +82,7 @@ if side_radio == 'Start here!':
 
 		st.write(
 		'''
-		**Citation:** Arda Halu, Julius Decano, Joan Matamalas, Mary Whelan, Takaharu Asano, Namitra Kalicharran, 
+		**Citation:** Arda Halu, Sarvesh Chelvanambi, Julius Decano, Joan Matamalas, Mary Whelan, Takaharu Asano, Namitra Kalicharran, 
 		Sasha Singh, Joseph Loscalzo, Masanori Aikawa, "Integrating pharmacogenomics and cheminformatics with diverse 
 		disease phenotypes for cell type-guided drug discovery"
 		'''
@@ -157,12 +157,12 @@ elif side_radio == 'Run Pathopticon':
 		form_cols2 = st.columns(3)
 		rr = form_cols2[0].number_input('r value (default=2.0)', value=2.0, step=0.01)
 		Nrand = form_cols2[1].number_input('Number of randomizations (default=100)', 100, step=100) 
-		default_geneset_name, default_up, default_dn = default_input_geneset(input_paths_dict)
-		geneset_name = form_cols2[2].text_input('Input gene signature name', default_geneset_name)
+# 		default_geneset_name, default_up, default_dn = default_input_geneset(input_paths_dict)
+		geneset_name = form_cols2[2].text_input('Input gene signature name')
 	
 		form_cols2 = st.columns(2)
-		input_up = form_cols2[0].text_area('Input gene signature: Up genes', default_up)
-		input_dn = form_cols2[1].text_area('Input gene signature: Down genes', default_dn)
+		input_up = form_cols2[0].text_area('Input gene signature: Up genes')
+		input_dn = form_cols2[1].text_area('Input gene signature: Down genes')
 		submit_button = st.form_submit_button(label='Submit job to Pathopticon')
 
 		if (mm1=='PACOS') & (mm2=='Enhance'):
@@ -222,9 +222,8 @@ elif side_radio == 'Run Pathopticon':
 			
 			data_load_state = status_msg.text('Retrieving true positives...')
 			geneset_pert_iname_dict = calculate_FE_pvals_geneset(geneset_up, geneset_dn, geneset_name, CTD_mRNA_up_final, CTD_mRNA_dn_final, 
-																 allgenes, alldrugs, proj_path, adjust=False, threshold=0.05)
-			st.write(geneset_pert_iname_dict['fwd'])
-			st.write(geneset_pert_iname_dict['rev'])
+																 allgenes, alldrugs, args.proj_path, adjust=False, threshold=0.05)
+
 			data_load_state.text('Retrieving true positives...done.')
 			
 			if (('_reverse' in PACOS_model) & (len(geneset_pert_iname_dict['rev']) >= 5)) | (('_reverse' not in PACOS_model) & (len(geneset_pert_iname_dict['fwd']) >= 5)):
@@ -243,12 +242,12 @@ elif side_radio == 'Run Pathopticon':
 				pacos_tool_merged_df = PACOS(pcp_geneset_df, pcp_perturbation_df_dict, alldrugs, allcells,
 											 QUIZC_activityStats_nooutliers_df_besttool, args.proj_path, method_name=method_name, geneset_name=geneset_name, 
 											 r=rr, threshold=10, tqdm_off=False)
-				st.write(pacos_tool_merged_df)
+
 				model_auroc_df, model_auprc_df = PACOS_cell_AUC_FE(pacos_tool_merged_df, allcells, 
                                                                geneset_pert_iname_dict['fwd'], 
                                                                geneset_pert_iname_dict['rev'],
                                                                models=[PACOS_model], auc_params={'auc_threshold':5, 'binsize':1}) 
-				st.write(model_auroc_df)
+
 				data_load_state.text('Running Pathopticon...done.')
 				
 				if model_auroc_df['%s_AUROC' % PACOS_model].isnull().all():
