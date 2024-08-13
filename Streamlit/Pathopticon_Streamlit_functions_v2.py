@@ -709,7 +709,7 @@ def calculate_FE_pvals_geneset(geneset_up, geneset_dn, geneset_name, CTD_mRNA_up
     
     else:
         
-        print('The Fisher\'s Exact p-value table exists in this directory. Reading from file.')
+        print('The Fisher\'s exact p-value table exists in this directory. Reading from file.')
         FE_table_pvals = pd.read_csv(proj_path +  'FE_table_pvals_%s.csv' % (geneset_name), index_col=0)
         FE_table_adj_pvals = pd.read_csv(proj_path +  'FE_table_adj_pvals_%s.csv' % (geneset_name), index_col=0)
         

@@ -238,7 +238,7 @@ elif side_radio == 'Run Pathopticon':
 				pcp_geneset_df = PCP_geneset(geneset_up, geneset_dn, Enrichr_GEO_disease_human_up, Enrichr_GEO_disease_human_dn, geneset_name=geneset_name)
 				data_load_state.text('Calculating PCP for input gene signature...done.')
 
-				data_load_state = status_msg.text('Running Pathopticon...(this may take a few minutes)')
+				data_load_state = status_msg.text('Running Pathopticon...(this may take several minutes due to the large size of the full dataset; thank your for your patience)')
 				pacos_tool_merged_df = PACOS(pcp_geneset_df, pcp_perturbation_df_dict, alldrugs, allcells,
 											 QUIZC_activityStats_nooutliers_df_besttool, args.proj_path, method_name=method_name, geneset_name=geneset_name, 
 											 r=rr, threshold=10, tqdm_off=False)
@@ -257,7 +257,7 @@ elif side_radio == 'Run Pathopticon':
 					Alternatively, you can consider expanding the input gene signatures.')
 					st.stop()
 				
-				data_load_state = status_msg.text('Performing cell line-specific randomization...(this may take a few minutes)')
+				data_load_state = status_msg.text('Performing cell line-specific randomization...(this may take >15 minutes due to the large size of the full dataset; thank your for your patience)')
 				rand_model_auroc_df_dict, rand_model_auprc_df_dict = PACOS_cell_AUC_randomize_FE(pacos_tool_merged_df, allcells, 
                                                                                              geneset_pert_iname_dict['fwd'], 
                                                                                              geneset_pert_iname_dict['rev'],
