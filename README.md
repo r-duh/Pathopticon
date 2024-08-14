@@ -73,6 +73,12 @@ typically up- and down-regulated genes from omics experiments.
 
 ## Installing and running the Pathopticon Streamit app
 
+We provide two versions of Pathopticon: (i) a full version that incorporates all 70 cell lines in the LINCS-CMap, including the "core" cell lines; 
+(ii) a "lite" version that incorporates the 60 cell lines, without the "core" cell lines. The reason for this distinction is that the "core" cell lines have
+many more, typically by one-to-two orders of magnitude, perturbations and instances per cell line, which results in much heavier datasets for the "full" version.
+This also results in significantly slower runtimes (<5 mins vs >25 mins.) for the full version. We recommend the use of the "lite" version unless the core cell 
+lines are being investigated specifically.
+
 There are two options to install and run Pathopticon: 
 
 #### 1) Run Pathopticon Streamlit app as a Docker container (requires [Docker installation](https://docs.docker.com/get-docker/))
