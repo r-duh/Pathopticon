@@ -89,6 +89,7 @@ This option is somewhat slower to run but has the advantage of not depending on 
 whereas in the slim version, the necessary files need to be mounted. Overall, we have 4 versions of the Pathopticon Docker image. We provide instructions for both methods below.
 
 **Note:** The instructions below are for Pathopticon lite. Please make the following substitution for each: 
+
 Pathopticon lite/full: rduh/pathopticon-streamlit-lite:full <br />
 Pathopticon lite/slim: rduh/pathopticon-streamlit-lite:slim <br />
 Pathopticon complete/full: rduh/pathopticon-streamlit:full <br />
