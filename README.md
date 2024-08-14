@@ -84,8 +84,15 @@ There are two options to install and run Pathopticon:
 
 #### 1) Run Pathopticon Streamlit app as a Docker container (requires [Docker installation](https://docs.docker.com/get-docker/))
 This option is somewhat slower to run but has the advantage of not depending on the specific package environment and operating system of the user.
+
 **Note:** We provide a "full" and a "slim" version of the Docker image. In the full version, the image is built with all the necessary files included,
-whereas in the slim version, the necessary files need to be mounted. We provide instructions for both methods below.
+whereas in the slim version, the necessary files need to be mounted. Overall, we have 4 versions of the Pathopticon Docker image. We provide instructions for both methods below.
+
+**Note:** The instructions below are for Pathopticon lite. Please make the following substitution for each: 
+Pathopticon lite/full: rduh/pathopticon-streamlit-lite:full
+Pathopticon lite/slim: rduh/pathopticon-streamlit-lite:slim
+Pathopticon complete/full: rduh/pathopticon-streamlit:full
+Pathopticon complete/slim: rduh/pathopticon-streamlit:slim
 
 - Once Docker is installed, the Pathopticon image "rduh/pathopticon-streamlit:slim" can either be pulled from Docker Hub
 ```
