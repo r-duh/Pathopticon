@@ -73,17 +73,19 @@ typically up- and down-regulated genes from omics experiments.
 
 ## Installing and running the Pathopticon Streamit app
 
-We provide two versions of Pathopticon: (i) a **full** version that incorporates all 70 cell lines in the LINCS-CMap, including the "core" cell lines; 
+We provide two versions of Pathopticon: (i) a **complete** version that incorporates all 70 cell lines in the LINCS-CMap, including the "core" cell lines; 
 (ii) a **lite** version that incorporates the 60 cell lines, without the "core" cell lines (A375, A549, HA1E, HCC515, HEPG2, HT29, MCF7, NPC, PC3, VCAP). 
 The reason for this distinction is that the "core" cell lines have
-many more, typically by 1-2 orders of magnitude, perturbations and instances per cell line, which results in much heavier datasets for the **full** version.
-This also results in significantly slower runtimes (<5 mins. for lite vs >25 mins. for full). We therefore recommend the use of the **lite** version unless 
+many more, typically by 1-2 orders of magnitude, perturbations and instances per cell line, which results in much heavier datasets for the **complete** version.
+This also results in significantly slower runtimes (<5 mins. for lite vs >25 mins. for complete). We therefore recommend the use of the **lite** version unless 
 the core cell lines are being investigated specifically.
 
 There are two options to install and run Pathopticon: 
 
 #### 1) Run Pathopticon Streamlit app as a Docker container (requires [Docker installation](https://docs.docker.com/get-docker/))
 This option is somewhat slower to run but has the advantage of not depending on the specific package environment and operating system of the user.
+**Note:** We provide a "full" and a "slim" version of the Docker image. In the full version, the image is built with all the necessary files included,
+whereas in the slim version, the necessary files need to be mounted. We provide instructions for both methods below.
 
 - Once Docker is installed, the Pathopticon image "rduh/pathopticon-streamlit:slim" can either be pulled from Docker Hub
 ```
