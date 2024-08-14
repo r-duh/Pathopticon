@@ -86,7 +86,8 @@ There are two options to install and run Pathopticon:
 This option is somewhat slower to run but has the advantage of not depending on the specific package environment and operating system of the user.
 
 **Note:** We provide a "full" and a "slim" version of the Docker image. In the full version, the image is built with all the necessary files included,
-whereas in the slim version, the necessary files need to be mounted. Overall, we have 4 versions of the Pathopticon Docker image. We provide instructions for both methods below.
+whereas in the slim version, the necessary files need to be mounted. We recommend to use the slim versions of the Pathopticon Docker images as these are smaller in size.
+Overall, we have four versions of the Pathopticon Docker image. We provide instructions for both methods below.
 
 **Note:** The instructions below are for Pathopticon lite. Please make the following substitution for each: 
 
@@ -95,16 +96,16 @@ Pathopticon lite/slim: rduh/pathopticon-streamlit-lite:slim <br />
 Pathopticon complete/full: rduh/pathopticon-streamlit:full <br />
 Pathopticon complete/slim: rduh/pathopticon-streamlit:slim <br />
 
-- Once Docker is installed, the Pathopticon image "rduh/pathopticon-streamlit:slim" can either be pulled from Docker Hub
+- Once Docker is installed, the Pathopticon image "rduh/pathopticon-streamlit-lite:slim" can either be pulled from Docker Hub
 ```
-docker pull rduh/pathopticon-streamlit:slim
+docker pull rduh/pathopticon-streamlit-lite:slim
 ```
 or loaded from the [.tar file](https://www.dropbox.com/s/uf6cx1d21vwttju/pathopticon_streamlit_slim.tar?dl=0) using
 ```
-docker load --input pathopticon_streamlit_slim.tar
+docker load --input pathopticon-streamlit-lite_slim.tar
 ```
 
-- [Download](https://www.dropbox.com/sh/mh9v3ge3mguqoix/AAAjZTEcg6Lvp7RZXAhKVdPFa?dl=0) the Pathopticon folder to be mounted as a volume to the Docker container. This local folder (i.e., located in the user's machine), named /Pathopticon_Streamlit_Docker_mount/, will act as the main folder in which Pathopticon Streamlit app's container will read and write files.
+- If using the slim version, [download](https://www.dropbox.com/sh/mh9v3ge3mguqoix/AAAjZTEcg6Lvp7RZXAhKVdPFa?dl=0) the Pathopticon folder to be mounted as a volume to the Docker container. This local folder (i.e., located in the user's machine), named /Pathopticon_Streamlit_Docker_mount/, will act as the main folder in which Pathopticon Streamlit app's container will read and write files.
 
 - To run the Pathopticon Streamlit app as a Docker container, type in the below command in the terminal. /path/to/Pathopticon_Streamlit_Docker_mount/ is where the folder you downloaded above is located in your computer. 
 ```
