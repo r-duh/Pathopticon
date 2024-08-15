@@ -184,9 +184,9 @@ elif side_radio == 'Run Pathopticon':
 		geneset_dn = set(input_dn.split('\n')) - set([''])
 
 		if len(geneset_name)==0:
-			form.error('Please provide an input signature name.')
+			st.error('Please provide an input signature name.')
 		elif (len(geneset_up)==0) | (len(geneset_dn)==0):
-			form.error('Please provide both up and down gene signatures.')	
+			st.error('Please provide both up and down gene signatures.')	
 		else:	
 			data_load_state = status_msg.text('Loading input data...')
 			
