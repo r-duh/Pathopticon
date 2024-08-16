@@ -86,7 +86,8 @@ There are two options to install and run Pathopticon:
 This option is somewhat slower to run but has the advantage of not depending on the specific package environment and operating system of the user.
 
 **Note:** We provide a "full" and a "slim" version of the Docker image. In the full version, the image is built with all the necessary files included,
-whereas in the slim version, the necessary files need to be mounted. We recommend to use the slim versions of the Pathopticon Docker images as these are smaller in size.
+whereas in the slim version, the necessary files need to be mounted. We recommend to use the slim versions of the Pathopticon Docker images as these are smaller in size 
+and give the user the flexibility to access the mounted project folder.
 Overall, we have four versions of the Pathopticon Docker image. We provide instructions for both methods below.
 
 **Note:** The instructions below are for Pathopticon lite. Please make the following substitution for each: 
