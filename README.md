@@ -1,6 +1,6 @@
 # :eyeglasses: Pathopticon: Linking gene and perturbation signatures through their <ins>pathop</ins>heno<ins>t</ins>yp<ins>i</ins>c <ins>con</ins>gruity
 
-**Citation:** Arda Halu, Julius Decano, Joan Matamalas, Mary Whelan, Takaharu Asano, Namitra Kalicharran, 
+**Citation:** Arda Halu, Sarvesh Chelvanambi, Julius Decano, Joan Matamalas, Mary Whelan, Takaharu Asano, Namitra Kalicharran, 
 Sasha Singh, Joseph Loscalzo, Masanori Aikawa, "Integrating pharmacogenomics and cheminformatics with diverse 
 disease phenotypes for cell type-guided drug discovery"
 
