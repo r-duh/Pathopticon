@@ -112,7 +112,12 @@ docker load --input pathopticon-streamlit-lite_slim.tar
 
 - To run the Pathopticon Streamlit app as a Docker container, type in the below command in the terminal. /path/to/Pathopticon_Streamlit_Docker_mount/ is where the folder you downloaded above is located in your computer. 
 ```
-docker run -it -v /path/to/Pathopticon_Streamlit_Docker_mount/:/Pathopticon_Streamlit_app/ -p 8501:8501 rduh/pathopticon-streamlit:slim
+docker run -it -v /path/to/Pathopticon_Streamlit_Docker_mount/:/Pathopticon_Streamlit_app/ -p 8501:8501 rduh/pathopticon-streamlit-lite:slim
+```
+
+- If using the full version, simply type in the command below:
+```
+docker run -it -p 8501:8501 rduh/pathopticon-streamlit-lite:full 
 ```
 
 - Finally, to see the Streamlit app, go to your browser and enter the address that appears in your terminal (It looks like this: "You can now view your Streamlit app in your browser. URL: `http://0.0.0.0:8501` "). So, typically `http://0.0.0.0:8501`. If you have more than one Streamlit instance running, this can be `http://0.0.0.0:8502`, `http://0.0.0.0:8503`, and so on.
