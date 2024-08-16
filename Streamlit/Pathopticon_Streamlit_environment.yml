@@ -1,7 +1,7 @@
-name: pathopticon
+name: Pathopticon_Streamlit
 channels:
-  - anaconda
   - bokeh
+  - anaconda
   - bioconda
   - defaults
   - conda-forge
@@ -32,9 +32,9 @@ dependencies:
   - brotlipy=0.7.0=py38h9ed2024_1003
   - bzip2=1.0.8=h1de35cc_0
   - c-ares=1.18.1=hca72f7f_0
-  - ca-certificates=2022.4.26=hecd8cb5_0
+  - ca-certificates=2023.08.22=hecd8cb5_0
   - cachetools=4.2.2=pyhd3eb1b0_0
-  - certifi=2022.6.15=py38hecd8cb5_0
+  - certifi=2023.7.22=py38hecd8cb5_0
   - cffi=1.15.1=py38h6c40b1e_2
   - charset-normalizer=2.0.4=pyhd3eb1b0_0
   - click=8.0.4=py38hecd8cb5_0
@@ -126,12 +126,13 @@ dependencies:
   - notebook-shim=0.2.2=py38hecd8cb5_0
   - numexpr=2.8.4=py38he696674_0
   - numpy=1.21.1=py38had91d27_0
-  - openssl=1.1.1s=hca72f7f_0
+  - openssl=1.1.1w=hca72f7f_0
   - orc=1.7.4=h9274d09_0
   - packaging=21.3=pyhd3eb1b0_0
   - pandas=1.4.2=py38he9d5cce_0
   - pandocfilters=1.5.0=pyhd3eb1b0_0
   - parso=0.8.3=pyhd3eb1b0_0
+  - patsy=0.5.3=py38hecd8cb5_0
   - pexpect=4.8.0=pyhd3eb1b0_3
   - pickleshare=0.7.5=pyhd3eb1b0_1003
   - pillow=9.2.0=py38hde71d04_1
@@ -175,6 +176,7 @@ dependencies:
   - soupsieve=2.3.2.post1=py38hecd8cb5_0
   - sqlite=3.40.0=h880c91c_0
   - stack_data=0.2.0=pyhd3eb1b0_0
+  - statsmodels=0.13.5=py38hacda100_1
   - streamlit=1.11.0=py38hecd8cb5_0
   - terminado=0.13.1=py38hecd8cb5_0
   - tinycss2=1.2.1=py38hecd8cb5_0
@@ -202,5 +204,5 @@ dependencies:
   - zipp=3.8.0=py38hecd8cb5_0
   - zlib=1.2.13=h4dc903c_0
   - zstd=1.5.2=hcb37349_0
-
+prefix: /Users/ardahalu/anaconda3/envs/Pathopticon_Streamlit
 
