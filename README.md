@@ -77,7 +77,7 @@ We provide two versions of Pathopticon: (i) a **complete** version that incorpor
 (ii) a **lite** version that incorporates the 60 cell lines, without the "core" cell lines (A375, A549, HA1E, HCC515, HEPG2, HT29, MCF7, NPC, PC3, VCAP). 
 The reason for this distinction is that the "core" cell lines have
 many more, typically by 1-2 orders of magnitude, perturbations and instances per cell line, which results in much heavier datasets for the **complete** version.
-This also results in significantly slower runtimes (<5 mins. for lite vs >25 mins. for complete in a typical laptop). We therefore recommend the use of the **lite** version unless 
+This also results in significantly slower runtimes (<10 mins. for lite vs >30 mins. for complete in a typical laptop). We therefore recommend the use of the **lite** version unless 
 the core cell lines are being investigated specifically.
 
 There are two options to install and run Pathopticon: 
