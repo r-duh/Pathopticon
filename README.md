@@ -102,9 +102,9 @@ Pathopticon complete/slim: rduh/pathopticon-streamlit:slim <br />
 docker pull rduh/pathopticon-streamlit-lite:slim
 ```
 or loaded from the .tar file ([Pathopticon lite/full](https://www.dropbox.com/scl/fi/cmkx7nggi1fwh9mmq8iws/pathopticon-streamlit-lite_full.tar?rlkey=01tjh7l1nk6u86va79ge5ursb&dl=0),
-[Pathopticon lite/slim](https://www.dropbox.com/scl/fi/1h5hhwtenhd8nszmvwh2y/pathopticon-streamlit-lite_slim.tar?rlkey=0j8u3zwb5juhlyv1csssg4n1l&dl=0),
-[Pathopticon complete/full](https://www.dropbox.com/scl/fi/sjrc0ajmme0giup4v2z2n/pathopticon-streamlit_full.tar?rlkey=q31fg3c85bw3v9pch22foj6bd&dl=0), or
-[Pathopticon complete/slim](https://www.dropbox.com/scl/fi/5gw91f25q61wrrkmobwfg/pathopticon-streamlit_slim.tar?rlkey=k1byejknt8o0s8qmbmijf06sy&dl=0)) using (example below for Pathopticon lite/slim), 
+[Pathopticon lite/slim](https://www.dropbox.com/scl/fi/9gbpsm24glli7jpxryd36/pathopticon-streamlit-lite_slim.tar?rlkey=9m9yuyy7e8xmukzzuymeeug5j&dl=0),
+[Pathopticon complete/full](https://www.dropbox.com/s/3jm5db48hy9iymw/pathopticon-streamlit_full.tar?dl=0), or
+[Pathopticon complete/slim](https://www.dropbox.com/scl/fi/rrh30z8icd2pdyreqc6wd/pathopticon-streamlit_slim.tar?rlkey=ml6ajjgy37njhm2qjn7rjzwim&dl=0)) using (example below for Pathopticon lite/slim), 
 ```
 docker load --input pathopticon-streamlit-lite_slim.tar
 ```
