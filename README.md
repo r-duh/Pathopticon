@@ -141,8 +141,14 @@ cd /path/to/Pathopticon_Streamlit_Docker_mount/
 ```
 Then, run the streamlit run by typing the below command (note that it has the additional --proj_path flag, which needs to be set to the Pathopticon Streamlit app directory
 ```
-streamlit run Pathopticon_Streamlit.py -- --proj_path=/path/to/Pathopticon_Streamlit_Docker_mount/
+streamlit run Pathopticon_Streamlit_v2_lite.py -- --proj_path=/path/to/Pathopticon_Streamlit_Docker_mount/
 ```
+for the lite version of Pathopticon, or 
+```
+streamlit run Pathopticon_Streamlit_v2.py -- --proj_path=/path/to/Pathopticon_Streamlit_Docker_mount/
+```
+for the complete version of Pathopticon.
+
 Again, /path/to/Pathopticon_Streamlit_Docker_mount/ is where the Pathopticon mount folder that you downloaded is located in your computer.
 
 - Finally, to see the Streamlit app, go to your browser and enter the address that appears in your terminal (It looks like this: "You can now view your Streamlit app in your browser. URL: `http://0.0.0.0:8501` "). So, typically `http://0.0.0.0:8501`. If you have more than one Streamlit instance running, this can be `http://0.0.0.0:8502`, `http://0.0.0.0:8503`, and so on.
