@@ -37,7 +37,7 @@ lines were significant, and let you access the ranked list of drugs within each 
 inspect the diseases with similar gene signatures, and finally focus on a disease to see a subnetwork consisting of the input 
 signature, the chosen disease's gene signature and the chosen drug.		
 
-![Overview of the Pathopticon framework](https://github.com/r-duh/Pathopticon/blob/main/Pathopticon_overview_fig.png?raw=true)
+![Overview of the Pathopticon framework](https://github.com/r-duh/Pathopticon/blob/main/Pathopticon_overview_fig_v2.png?raw=true)
 
 ***
 
