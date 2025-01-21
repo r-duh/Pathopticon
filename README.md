@@ -4,7 +4,7 @@
 Sasha Singh, Joseph Loscalzo, Masanori Aikawa, "Integrating pharmacogenomics and cheminformatics with diverse 
 disease phenotypes for cell type-guided drug discovery"
 
-Preprint URL: https://www.biorxiv.org/content/10.1101/2022.12.21.521456v1
+Manuscript URL: https://genomemedicine.biomedcentral.com/articles/10.1186/s13073-025-01431-x
 
 ***
 
